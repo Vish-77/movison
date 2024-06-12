@@ -301,6 +301,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             content: Text('${product.name} is already in your cart.'),
           ),
         );
+        //Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()));
       } else {
         // If the product is not in the cart, add it to Firestore
         await FirebaseFirestore.instance.collection('cart').add({
@@ -319,6 +320,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             content: Text('${product.name} added to your cart.'),
           ),
         );
+        
       }
     } catch (e) {
       print('Error adding product to cart: $e');

@@ -39,6 +39,7 @@ class Product {
 class ProductList extends StatelessWidget {
   final CollectionReference productsCollection =
       FirebaseFirestore.instance.collection('products');
+   final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   Widget build(BuildContext context) {
@@ -123,48 +124,52 @@ class ProductList extends StatelessWidget {
           ),
         ]));
   }
-   void addToCart(BuildContext context, Product product) async {
-    // try {
-    //   // Check if the product is already in the cart
-    //   QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
-    //       .collection('cart')
-    //       .where('id', isEqualTo: product.id)
-    //       .get();
+  Future<void> addToCart(BuildContext context, Product product) async {
+    try {
+      // Check if the product is already in the cart
+      QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
+          .collection('cart')
+          .where('id', isEqualTo: product.id)
+          .get();
 
-    //   if (cartSnapshot.docs.isNotEmpty) {
-    //     // If the product is already in the cart, show a tooltip
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text('${product.name} is already in your cart.'),
-    //       ),
-    //     );
-    //   } else {
-    //     // If the product is not in the cart, add it to Firestore
-    //     await FirebaseFirestore.instance.collection('cart').add({
-    //       'id': product.id,
-    //       'name': product.name,
-    //       'price': product.price,
-    //       'imageUrl': product.imageUrl,
-    //       'ProductId': product.userId,
-    //       'Description': product.description,
-    //       // Add other fields as needed
-    //     });
-    //     print('Added ${product.name} to cart');
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(
-    //         content: Text('${product.name} added to your cart.'),
-    //       ),
-    //     );
-    //   }
-    // } catch (e) {
-    //   print('Error adding product to cart: $e');
-    // }
+      if (cartSnapshot.docs.isNotEmpty) {
+        // If the product is already in the cart, show a tooltip
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${product.name} is already in your cart.'),
+          ),
+        );
+        //Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()));
+      } else {
+        // If the product is not in the cart, add it to Firestore
+        await FirebaseFirestore.instance.collection('cart').add({
+          'id': product.id,
+          'name': product.name,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'ProductId': product.userId,
+          'Description': product.description,
+          'userId': currentUserId,
+          // Add other fields as needed
+        });
+        print('Added ${product.name} to cart');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${product.name} added to your cart.'),
+          ),
+        );
+        
+      }
+    } catch (e) {
+      print('Error adding product to cart: $e');
+    }
   }
+
 
 }
 class ProductCardRow extends StatelessWidget {
   final List<Product> products;
-  final void Function(BuildContext, Product) addToCart;
+   final Function(BuildContext, Product) addToCart;
   final bool alignLeft;
 
   const ProductCardRow({
@@ -195,7 +200,7 @@ class ProductCardRow extends StatelessWidget {
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  final void Function(BuildContext, Product) addToCart;
+   final Function(BuildContext, Product) addToCart;
 
   const ProductCard({Key? key, required this.product, required this.addToCart})
       : super(key: key);
@@ -248,9 +253,10 @@ class ProductCard extends StatelessWidget {
               height: 30,
               margin: const EdgeInsets.only(top:15,bottom: 5,left: 15,right: 15),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: ()async {
                   // Call addToCart method when the button is pressed
-                  addToCart(context, product);
+                  await addToCart(context, product);
+                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()),);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
