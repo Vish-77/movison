@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1083683176319",
+    "project_id": "movison",
+    "storage_bucket": "movison.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1083683176319:android:f6d52f5cbbae9d8552244a",
+        "android_client_info": {
+          "package_name": "com.example.movison"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4NMyJx4D7SUvx6FStoKhGK0BB7R2Ipu8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
