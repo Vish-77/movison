@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movison/screens/Home/BooksRent.dart';
+import 'package:movison/widgets/razorpay_payment.dart';
+
 
 class CartScreen extends StatelessWidget {
   @override
@@ -25,20 +27,16 @@ class CartScreen extends StatelessWidget {
     }
 
     return Scaffold(
-        
-        appBar: AppBar( 
-          centerTitle: true,
-          title:Text(
-                    "My Cart",
-                    style: GoogleFonts.ubuntu(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                    ),
-                  )
-        ),
+        appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              "My Cart",
+              style: GoogleFonts.ubuntu(
+                fontWeight: FontWeight.w600,
+                fontSize: 20,
+              ),
+            )),
         body: Stack(children: [
-          
-          
           Positioned.fill(
             top: 10,
             child: StreamBuilder<QuerySnapshot>(
@@ -191,17 +189,17 @@ class CartScreen extends StatelessWidget {
         ]));
   }
 }
+
 class CartDetailScreen extends StatefulWidget {
   final Product product;
 
-  const CartDetailScreen({Key? key, required this.product})
-      : super(key: key);
+  const CartDetailScreen({Key? key, required this.product}) : super(key: key);
 
   @override
-  _ProductDetailScreenState createState() => _ProductDetailScreenState();
+  ProductDetailScreenState createState() => ProductDetailScreenState();
 }
 
-class _ProductDetailScreenState extends State<CartDetailScreen> {
+class ProductDetailScreenState extends State<CartDetailScreen> {
   late String productUserName = '';
   late String profilePic = '';
   final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
@@ -269,25 +267,27 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
     fetchUserName(widget.product.userId);
   }
 
+  int getAmount(){
+    return int.parse(widget.product.price.toStringAsFixed(2));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         centerTitle: true,
-       title: Text(
-                "Book Details",
-                style: GoogleFonts.ubuntu(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
+        title: Text(
+          "Book Details",
+          style: GoogleFonts.ubuntu(
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            
             Container(
               margin: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
               width: MediaQuery.of(context).size.width,
@@ -344,14 +344,14 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
                     textAlign: TextAlign.center,
                   )),
             ),
-             const Divider(
+            const Divider(
               color: Colors.black26,
               thickness: 2,
               height: 20,
               indent: 80,
               endIndent: 80,
             ),
-           Text(
+            Text(
               'Book Type : ${widget.product.type}',
               textAlign: TextAlign.center,
               style: GoogleFonts.ubuntu(
@@ -372,18 +372,25 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
                         color: Colors.yellow),
                     height: 45,
                     width: 170,
-                    child:  Center(child: Text("Buy",style: GoogleFonts.ubuntu(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),)),
+                    child: Center(
+                        child: Text(
+                      "Buy",
+                      style: GoogleFonts.ubuntu(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    )),
                   ),
                   onTap: () {
-                    //addToCart(context, widget.product);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RazorpayPayment(widget.product.price.toStringAsFixed(2))),
+                    );
                   },
                 )
               ],
             )
-     
           ],
         ),
       ),
