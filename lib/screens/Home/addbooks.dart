@@ -18,7 +18,6 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  TextEditingController addressController = TextEditingController();
   bool isAvailable = false;
   bool isLoading = false;
   // Default type
@@ -40,9 +39,11 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
 
     if (user != null) {
       String userId = user.uid;
+      print(userId);
       return userId;
     } else {
       // No user is signed in
+      print("null");
       return null;
     }
   }
@@ -89,54 +90,30 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
     Navigator.of(context).pop();
   }
 
-  String productType = 'Seed';
+  String productType = 'Buy';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 240, 204, 248),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(30),
-        child: AppBar(
-          leading: const SizedBox(),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
-          backgroundColor: Colors.orange,
-        ),
+
+      appBar: AppBar( 
+        centerTitle: true,
+        title:  Text(
+                  "Add New Books",
+                  style: GoogleFonts.ubuntu(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                  ),
+                ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 35.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                    setState(() {});
-                  },
-                  icon: SizedBox(
-                    height: 30,
-                    width: 30,
-                    child: Icon(Icons.arrow_back_ios_new),
-                  ),
-                ),
-                const SizedBox(
-                  width: 40,
-                ),
-                Text(
-                  "Add New Product",
-                  style: GoogleFonts.ubuntu(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                  ),
-                )
-              ],
-            ),
-            // Image picking section
+             // Image picking section
             Center(
               child: CircleAvatar(
-                backgroundColor: Colors.blue,
+                backgroundColor: Colors.grey,
                 radius: 40,
                 child: GestureDetector(
                   onTap: _pickImage,
@@ -167,7 +144,7 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
             const SizedBox(height: 12),
 
             Text(
-              "Product Name",
+              "Book Name",
               style: GoogleFonts.lato(
                 fontWeight: FontWeight.w500,
                 fontSize: 16,
@@ -191,7 +168,7 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
             Row(
               children: [
                 Text(
-                  'Product Type ',
+                  'Book Type ',
                   style: GoogleFonts.lato(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
@@ -201,7 +178,7 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
                   height: 60,
                   width: 176,
                   decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 244, 162, 252),
+  
                       border: Border.all(color: Colors.black, width: 2)),
                   child: DropdownButtonFormField(
                     elevation: 0,
@@ -217,9 +194,9 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
                     },
                     items: [
                       DropdownMenuItem<String>(
-                        value: 'Seed',
+                        value: 'None', // Add this line
                         child: Text(
-                          'Seed',
+                          'None',
                           style: GoogleFonts.lato(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -227,9 +204,9 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
                         ),
                       ),
                       DropdownMenuItem<String>(
-                        value: 'Fresh From Farm',
+                        value: 'Buy',
                         child: Text(
-                          'Fresh From Farm',
+                          'Buy',
                           style: GoogleFonts.lato(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -237,9 +214,9 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
                         ),
                       ),
                       DropdownMenuItem<String>(
-                        value: 'Fertilizer',
+                        value: 'Rent',
                         child: Text(
-                          'Fertilizer',
+                          'Rent',
                           style: GoogleFonts.lato(
                             fontWeight: FontWeight.w500,
                             fontSize: 14,
@@ -303,98 +280,63 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
             ),
 
             const SizedBox(height: 4),
-            Row(
-              children: [
-                Text(
-                  'Available:',
-                  style: GoogleFonts.lato(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Checkbox(
-                  value: isAvailable,
-                  shape: const CircleBorder(),
-                  checkColor: Colors.green,
-                  onChanged: (value) {
-                    setState(() {
-                      isAvailable = value ?? false;
-                    });
-                  },
-                )
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              "Address",
-              style: GoogleFonts.lato(
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              height: 50,
-              // width: 280,
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.elliptical(2, 2)),
-                  border: Border.all(width: 2.5)),
-              child: TextField(
-                controller: addressController,
-                decoration: const InputDecoration(border: InputBorder.none),
-              ),
-            ),
-            const SizedBox(height: 8),
+
             Center(
-              child: Container(
-                height: 30,
-                width: 160,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  color: Colors.orange,
-                ),
-                child: GestureDetector(
-                  onTap: () async {
+              child: GestureDetector(
+                onTap: () async {
+                  setState(() {
+                    isLoading = true;
+                  });
+
+                  // Show loading dialog
+                  //await _showLoadingDialog(context);
+                  
+                  try {
+                     userId = await getCurrentUserId() ?? "";
+
+        if (userId.isEmpty) {
+          // Show error dialog if user ID is not retrieved
+          print( "Failed to get user ID. Please try again.");
+          return;
+        }
+                    File imageFile = File(imagePathController.text);
+                
+                    await ProductService().addProduct(
+                      userId: userId,
+                      name: nameController.text,
+                      price: double.tryParse(priceController.text) ?? 0.0,
+                      type: productType,
+                      imageFile: imageFile,
+                      description: descriptionController.text,
+                    );
+
+                    // Clear the form fields after submission
+                    imagePathController.clear();
+                    nameController.clear();
+                    priceController.clear();
+                    productType = 'Buy'; 
+                    descriptionController.clear();// Reset to default type
+                    
+                    //Navigator.pop(context);
+                    // Show success dialog
+                    await _showSuccessDialog(context);
+                  }
+                  finally {
+                    // Hide loading dialog
+                    _hideLoadingDialog(context);
+
                     setState(() {
-                      isLoading = true;
+                      isLoading = false;
                     });
-
-                    // Show loading dialog
-                    await _showLoadingDialog(context);
-
-                    try {
-                      File imageFile = File(imagePathController.text);
-
-                      await ProductService().addProduct(
-                          userId: userId,
-                          name: nameController.text,
-                          price: double.tryParse(priceController.text) ?? 0.0,
-                          availability: isAvailable,
-                          type: productType,
-                          imageFile: imageFile,
-                          description: descriptionController.text,
-                          address: addressController.text);
-
-                      // Clear the form fields after submission
-                      imagePathController.clear();
-                      nameController.clear();
-                      priceController.clear();
-                      isAvailable = false;
-                      productType = 'Seed'; // Reset to default type
-
-                      // Show success dialog
-                      _showSuccessDialog(context);
-                    } finally {
-                      // Hide loading dialog
-                      _hideLoadingDialog(context);
-
-                      setState(() {
-                        isLoading = false;
-                      });
-                    }
-                  },
+                  }
+                },
+                child: Container(
+                  height: 30,
+                  width: 160,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    color: Colors.orange,
+                  ),
                   child: Center(
                       child: Text(
                     'Submit',

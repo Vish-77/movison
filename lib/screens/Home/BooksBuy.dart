@@ -36,7 +36,7 @@ class Product {
     );
   }
 }
-class ProductList extends StatelessWidget {
+class BuyList extends StatelessWidget {
   final CollectionReference productsCollection =
       FirebaseFirestore.instance.collection('products');
 
@@ -47,7 +47,7 @@ class ProductList extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-                  "Books For Rent",
+                  "Books For Buy",
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w600,
                     fontSize: 20,
@@ -76,7 +76,7 @@ class ProductList extends StatelessWidget {
                 List<Product> products = snapshot.data!.docs
                     .map((DocumentSnapshot document) =>
                         Product.fromFirestore(document))
-                    .where((product) => product.type.toLowerCase() == 'rent')
+                    .where((product) => product.type.toLowerCase() == 'buy')
                     .toList();
 
                 // Sort products by name
@@ -342,6 +342,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             content: Text('${product.name} is already in your cart.'),
           ),
         );
+        //Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()));
       } else {
         // If the product is not in the cart, add it to Firestore
         await FirebaseFirestore.instance.collection('cart').add({
@@ -360,6 +361,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             content: Text('${product.name} added to your cart.'),
           ),
         );
+        
       }
     } catch (e) {
       print('Error adding product to cart: $e');
@@ -376,7 +378,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         centerTitle: true,
        title: Text(
@@ -391,7 +392,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            
             Container(
               margin: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
               width: MediaQuery.of(context).size.width,
@@ -463,7 +463,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 fontSize: 16,
               ),
             ),
-            SizedBox(
+     SizedBox(
               height: 20,
             ),
             Row(
@@ -488,7 +488,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 )
               ],
             )
-     
           ],
         ),
       ),

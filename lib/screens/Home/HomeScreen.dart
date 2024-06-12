@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movison/screens/Home/Availablebooks.dart';
 import 'package:movison/screens/Home/addbooks.dart';
+import 'package:movison/screens/Home/allBooks.dart';
 import 'package:movison/size_config.dart';
 import 'package:movison/theme/color.dart';
 import 'package:movison/utils/data.dart';
@@ -85,48 +86,53 @@ class _HomePageState extends State<HomeScreen> {
     );
   }
 
-  _buildCategories() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: List.generate(
-          categories.length,
-          (index) => Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: CategoryBox(
-              selectedColor: Colors.white,
-              data: categories[index],
-              onTap: () {
-                _onCategoryTap(categories[index]);
-              },
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // _buildCategories() {
+  //   return SingleChildScrollView(
+  //     padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+  //     scrollDirection: Axis.horizontal,
+  //     child: Row(
+  //       children: List.generate(
+  //         categories.length,
+  //         (index) => Padding(
+  //           padding: const EdgeInsets.only(right: 15),
+  //           child: CategoryBox(
+  //             selectedColor: Colors.white,
+  //             data: categories[index],
+  //             onTap: () {
+  //               _onCategoryTap(categories[index]);
+  //             },
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  void _onCategoryTap(Map<String, dynamic> categoryData) {
-    // Navigate to the corresponding category page based on the category name
-    switch (categoryData["name"]) {
-      case "Rent":
-        // Navigate to the "All" category page
-        Navigator.pushNamed(context, '/all_rent');
-        break;
-      case "Add Info":
-        Navigator.pushNamed(context, '/add_student_details');
-        break;
-      case "TimeLeft":
-        Navigator.pushNamed(context, '/book_purchase_details');
-        break;
+  // void _onCategoryTap(Map<String, dynamic> categoryData) {
+  //   // Navigate to the corresponding category page based on the category name
+  //   print("onswitch");
+  //   switch (categoryData["name"]) {
+  //     case "Rent":
+  //       // Navigate to the "All" category page
+  //       Navigator.pushNamed(context, '/all_rent');
+  //       break;
+  //      case "Buy":
+  //       // Navigate to the "All" category page
+  //       Navigator.pushNamed(context, '/all_buy');
+  //       break;
+  //     case "Add Info":
+  //       Navigator.pushNamed(context, '/add_student_details');
+  //       break;
+  //     case "TimeLeft":
+  //       Navigator.pushNamed(context, '/book_purchase_details');
+  //       break;
 
-      // Add cases for other categories as needed
-      default:
-        // Navigate to a default page or handle accordingly
-        break;
-    }
-  }
+  //     // Add cases for other categories as needed
+  //     default:
+  //       // Navigate to a default page or handle accordingly
+  //       break;
+  //   }
+  // }
 }
 
 class CategorySection extends StatefulWidget {
@@ -139,10 +145,10 @@ class CategorySection extends StatefulWidget {
 class _CategorySectionState extends State<CategorySection> {
   @override
   Widget build(BuildContext context) {
-    return _buildCategories();
+    return _buildCategories(context);
   }
 
-  Widget _buildCategories() {
+  Widget _buildCategories(BuildContext context) {
     return Container(
         padding: const EdgeInsets.all(20),
         width: getProportionateScreenWidth(310),
@@ -161,7 +167,7 @@ class _CategorySectionState extends State<CategorySection> {
                 selectedColor: Colors.white,
                 data: categories[index],
                 onTap: () {
-                  _onCategoryTap(categories[index]);
+                  _onCategoryTap(categories[index],context);
                 },
               ),
             ),
@@ -170,21 +176,18 @@ class _CategorySectionState extends State<CategorySection> {
   }
 }
 
-void _onCategoryTap(Map<String, dynamic> categoryData) {
+void _onCategoryTap(Map<String, dynamic> categoryData,BuildContext context) {
   // Navigate to the corresponding category page based on the category name
+  print("onswitch");
   switch (categoryData["name"]) {
     case "Rent":
       // Navigate to the "All" category page
-      //Navigator.pushNamed(context, '/all_rent');
+      Navigator.pushNamed(context, '/all_rent');
       break;
-    case "Add Info":
-      //Navigator.pushNamed(context, '/add_student_details');
+    case "Buy":
+      //Navigate to the "All" category page
+      Navigator.pushNamed(context, '/all_buy');
       break;
-    case "TimeLeft":
-      //Navigator.pushNamed(context, '/book_purchase_details');
-      break;
-
-    // Add cases for other categories as needed
     default:
       // Navigate to a default page or handle accordingly
       break;
@@ -319,6 +322,12 @@ class Body extends StatelessWidget {
             SizedBox(height: getProportionateScreenWidth(30)),
             CategorySection(),
             SizedBox(height: getProportionateScreenWidth(30)),
+            
+            SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.30,
+                       width: MediaQuery.of(context).size.width,
+                        child: AllProductsList(),
+                      ),
           ],
         ),
       ),

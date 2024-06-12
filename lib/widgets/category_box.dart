@@ -70,6 +70,10 @@ class CategoryBox extends StatelessWidget {
       case "Rent":
         Navigator.pushNamed(context, '/all_rent');
         break;
+      case "Buy":
+      //Navigate to the "All" category page
+      Navigator.pushNamed(context, '/all_buy');
+      break;
       case "Add Info":
         Navigator.pushNamed(context, '/add_student_details');
         break;

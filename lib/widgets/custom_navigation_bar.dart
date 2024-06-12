@@ -6,6 +6,7 @@ import 'package:movison/screens/Home/AllCategoryPage.dart';
 import 'package:movison/widgets/constants.dart';
 import 'package:movison/widgets/enums.dart';
 import 'package:movison/widgets/icon_but_with_cnt.dart';
+import 'package:movison/widgets/mycart.dart';
 
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -71,10 +72,7 @@ class CustomBottomNavBar extends StatelessWidget {
               IconButton(
                 icon: SvgPicture.asset("assets/icons/shopping_cart.svg"),
 
-                onPressed: () {
-                  //Navigator.of(context).push(MaterialPageRoute(builder:(context)=> AddProduct()),);
-                  //Navigator.pushNamed(context, Chat.routeName);
-                },
+               onPressed: () =>  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()),),
               ),
               IconButton(
                 icon: SvgPicture.asset(

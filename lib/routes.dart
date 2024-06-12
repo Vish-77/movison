@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:movison/screens/Home/AddStudentDetails.dart';
-import 'package:movison/screens/Home/AllCategoryPage.dart';
+import 'package:movison/screens/Home/BooksBuy.dart';
 import 'package:movison/screens/Home/BooksPurchasedDetails.dart';
 import 'package:movison/screens/Home/BooksRent.dart';
-import 'package:movison/screens/Home/TimeLeftOrOver.dart';
 import 'package:movison/screens/splash/splash_screen.dart';
 
 
 final Map<String, WidgetBuilder> routes = {
   SplashScreen.routeName: (context) => SplashScreen(),
-  '/all_rent': (context) => BooksRent(),
+  '/all_rent': (context) => ProductList(),
+  '/all_buy' :(context) => BuyList(),
   '/add_student_details':(context) => AddStudentdetails(),
   //'/time_left_over':(context)=>TimeLeftOrOver(productId: productId, index: index)
  

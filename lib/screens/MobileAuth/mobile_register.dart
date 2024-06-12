@@ -1,12 +1,11 @@
+
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:movison/screens/Home/HomeScreen.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart';
 import 'package:movison/screens/MobileAuth/custom_button_in_mobile_auth.dart';
 
 import 'package:provider/provider.dart';
-
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
@@ -87,8 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         phoneController.text = value;
                       });
                     },
-                    keyboardType:
-                        TextInputType.number, // Restrict to numeric keyboard
+                    keyboardType: TextInputType.number, // Restrict to numeric keyboard
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       hintText: "Enter phone number",
@@ -155,7 +153,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: CustomButton(
                       text: "Login",
                       onPressed: () => sendPhoneNumber(),
-                
                     ),
                   ),
                 ],
