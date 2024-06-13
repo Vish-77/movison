@@ -267,9 +267,10 @@ class ProductDetailScreenState extends State<CartDetailScreen> {
     fetchUserName(widget.product.userId);
   }
 
-  int getAmount(){
-    return int.parse(widget.product.price.toStringAsFixed(2));
-  }
+ double getAmount() {
+  return widget.product.price ; // Assuming price is in rupees
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -382,10 +383,12 @@ class ProductDetailScreenState extends State<CartDetailScreen> {
                     )),
                   ),
                   onTap: () {
+                    double amount = getAmount();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RazorpayPayment(widget.product.price.toStringAsFixed(2))),
+                          builder: (context) => RazorpayPayment(amount: amount),
+                      ),
                     );
                   },
                 )

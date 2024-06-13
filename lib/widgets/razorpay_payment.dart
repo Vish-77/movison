@@ -4,24 +4,23 @@ import 'package:movison/widgets/mycart.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class RazorpayPayment extends StatefulWidget {
-  // ignore: prefer_typing_uninitialized_variables
-  final amount;
-  RazorpayPayment(this.amount,{super.key});
+  final double amount;
+
+  // Constructor with named parameter `key` should be defined before other parameters
+  RazorpayPayment({Key? key, required this.amount}) : super(key: key);
 
   @override
   State createState() => RazorpayPaymentState();
 }
 
-class RazorpayPaymentState extends State {
+
+class RazorpayPaymentState extends State<RazorpayPayment> {
   late Razorpay _razorpay;
-  TextEditingController amtController = TextEditingController();
 
-  void openCheckout(amount) async {
-    amount = amount * 100;
-
+  void openCheckout() async {
     var options = {
       'key': 'rzp_test_10P5mm0lF565ag',
-      'amount': amount,
+      'amount': widget.amount*100, // Use the passed amount
       'name': 'movison',
       'prefill': {'contact': '1234567890', 'email': 'test@gamil.com'},
       'external': {
@@ -72,59 +71,31 @@ class RazorpayPaymentState extends State {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[800],
       body: Center(
         child: Column(
-                children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-        const Text(
-          "Welcome to Razorpay",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Padding(
-          padding: EdgeInsets.all(10),
-          child: TextFormField(
-            decoration: InputDecoration(
-                labelText: "Amount to be paid",
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white, width: 1.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.white, width: 1.0)),
-                errorStyle: TextStyle(color: Colors.redAccent, fontSize: 15)),
-            controller: amtController,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'select a book';
-              }
-              return null;
-            },
-          ),
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        ElevatedButton(
-            onPressed: () {
-              if (amtController.text.toString().isNotEmpty) {
-                setState(() {
-                  int amount = ProductDetailScreenState().getAmount();
-                  openCheckout(amount);
-                });
-              }
-            },
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Text("Make Payment"),
-              ))
-                ],
+          children: [
+            const SizedBox(
+              height: 80,
+            ),
+            const Text(
+              "Welcome to Razorpay",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                openCheckout();
+              },
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Text("Make Payment of ₹${widget.amount}"),
               ),
+            )
+          ],
+        ),
       ),
     );
   }
