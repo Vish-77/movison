@@ -75,8 +75,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 20),
                   TextFormField(
-                    cursorColor: Colors.black,
+                    cursorColor: Colors.orangeAccent,
                     controller: phoneController,
+                    keyboardType: TextInputType.phone,
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -86,8 +87,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         phoneController.text = value;
                       });
                     },
-                    keyboardType: TextInputType.number, // Restrict to numeric keyboard
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       hintText: "Enter phone number",
                       hintStyle: TextStyle(
@@ -104,28 +103,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         borderSide: const BorderSide(color: Colors.black12),
                       ),
                       prefixIcon: Container(
-                        padding: const EdgeInsets.all(12.0),
-                        child: InkWell(
-                          onTap: () {
-                            showCountryPicker(
-                                context: context,
-                                countryListTheme: const CountryListThemeData(
-                                  bottomSheetHeight: 500,
-                                ),
-                                onSelect: (value) {
-                                  setState(() {
-                                    selectedCountry = value;
-                                  });
-                                });
-                          },
-                          child: Text(
-                            "${selectedCountry.flagEmoji} + ${selectedCountry.phoneCode}",
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 4,
                             ),
-                          ),
+                            InkWell(
+                              onTap: () {
+                                showCountryPicker(
+                                    context: context,
+                                    countryListTheme:
+                                        const CountryListThemeData(
+                                      bottomSheetHeight: 550,
+                                    ),
+                                    onSelect: (value) {
+                                      setState(() {
+                                        selectedCountry = value;
+                                      });
+                                    });
+                              },
+                              child: Text(
+                                "${selectedCountry.flagEmoji} + ${selectedCountry.phoneCode}",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       suffixIcon: phoneController.text.length > 9
@@ -135,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               margin: const EdgeInsets.all(10.0),
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.black,
+                                color: Colors.green,
                               ),
                               child: const Icon(
                                 Icons.done,

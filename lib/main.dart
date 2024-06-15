@@ -14,13 +14,14 @@ Future<void> main() async {
   Platform.isAndroid
       ? await Firebase.initializeApp(
           options: const FirebaseOptions(
-              apiKey: 'AIzaSyB4NMyJx4D7SUvx6FStoKhGK0BB7R2Ipu8',
-              appId: '1:1083683176319:android:f6d52f5cbbae9d8552244a',
-              messagingSenderId: '1083683176319',
-              projectId: 'movison',
-              storageBucket: 'movison.appspot.com'),
+              apiKey: 'AIzaSyDI9W5yu6EvIrsSD0Fp4Qp86ECkSwnLghg',
+              appId: '1:1007217420625:android:c75cf6a9c1b6ed78c98b70',
+              messagingSenderId: '1007217420625',
+              projectId: 'movisonapp-87387',
+              storageBucket: 'movisonapp-87387.appspot.com'),
         )
       : await Firebase.initializeApp();
+      
   //Hive.registerAdapter(AdddataAdapter());
   //await Hive.openBox<Add_data>('data');
 

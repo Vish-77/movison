@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:movison/screens/Home/HomeScreen.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart';
 import 'package:movison/screens/MobileAuth/custom_button_in_mobile_auth.dart';
@@ -18,7 +17,7 @@ class UserInfromationScreen extends StatefulWidget {
 }
 
 class _UserInfromationScreenState extends State<UserInfromationScreen> {
-  
+  File? image;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final bioController = TextEditingController();
@@ -30,7 +29,10 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
     emailController.dispose();
     bioController.dispose();
   }
-
+void selectImage() async {
+    image = await pickImage(context);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,23 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                 child: Center(
                   child: Column(
                     children: [
+                      InkWell(
+                        onTap: () => selectImage(),
+                        child: image == null
+                            ? const CircleAvatar(
+                                backgroundColor: Colors.purple,
+                                radius: 50,
+                                child: Icon(
+                                  Icons.account_circle,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : CircleAvatar(
+                                backgroundImage: FileImage(image!),
+                                radius: 50,
+                              ),
+                      ),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.symmetric(
@@ -141,39 +160,36 @@ Padding EmailTextField() {
 
   // store user data to database
 void storeData() async {
-  final ap = Provider.of<AuthProvider>(context, listen: false);
-
-  // Check if the name field is not empty
-  if (nameController.text.trim().isNotEmpty) {
-    final now = DateTime.now();
-    final formattedDate = DateFormat("dd-MM-yyyy").format(now);
+    final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
       name: nameController.text.trim(),
       email: emailController.text.trim(),
-      createdAt: formattedDate,
-      phoneNumber: ap.uid,
-      uid: ap.uid,
+      bio: bioController.text.trim(),
+      profilePic: "",
+      createdAt: "",
+      phoneNumber: "",
+      uid: "",
     );
-
-    ap.saveUserDataToFirebase(
-      context: context,
-      userModel: userModel,
-      onSuccess: () {
-        ap.saveUserDataToSP().then(
-          (value) => ap.setSignIn().then(
-            (value) => Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ),
-              (route) => false,
-            ),
-          ),
-        );
-      },
-    );
-  } else {
-    showSnackBar(context, "Please Enter Your name");
+    if (image != null) {
+      ap.saveUserDataToFirebase(
+        context: context,
+        userModel: userModel,
+        profilePic: image!,
+        onSuccess: () {
+          ap.saveUserDataToSP().then(
+                (value) => ap.setSignIn().then(
+                      (value) => Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomeScreen(),
+                          ),
+                          (route) => false),
+                    ),
+              );
+        },
+      );
+    } else {
+      showSnackBar(context, "Please upload your profile photo");
+    }
   }
-}
 }
