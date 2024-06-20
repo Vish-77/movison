@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movison/screens/Home/BooksRent.dart';
+import 'package:movison/widgets/razorpay_payment.dart';
 
 class CartScreen extends StatelessWidget {
   @override
@@ -378,7 +379,14 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
               ),)),
                   ),
                   onTap: () {
-                    //addToCart(context, widget.product);
+                     Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RazorpayPayment(
+                          amount: widget.product.price,
+                        ),
+                      ),
+                    );
                   },
                 )
               ],

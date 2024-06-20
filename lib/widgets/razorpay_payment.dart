@@ -18,10 +18,10 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
 
   void openCheckout() async {
     var options = {
-      'key': 'rzp_test_10P5mm0lF565ag',
+      'key': '',
       'amount': widget.amount*100, // Use the passed amount
-      'name': 'movison',
-      'prefill': {'contact': '1234567890', 'email': 'test@gamil.com'},
+      'name': 'Vishal Vijay Deshpande',
+      'prefill': {'contact': '84216 70509', 'email': 'movison0320@gmail.com'},
       'external': {
         'wallets': ['paytm']
       }
@@ -98,4 +98,4 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
       ),
     );
   }
-}
+} 
