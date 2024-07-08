@@ -4,6 +4,7 @@ import 'package:movison/screens/MobileAuth/authprovider.dart' as MovisonAuthProv
 
 import 'package:movison/screens/MobileAuth/mobile_register.dart';
 import 'package:movison/screens/MobileAuth/usermodel.dart';
+import 'package:movison/screens/Personal/personalInfo.dart';
 import 'package:movison/screens/Privacy/privacypolicy.dart';
 import 'package:movison/theme/color.dart';
 import 'package:movison/utils/data.dart';
@@ -169,9 +170,27 @@ Widget _buildProfile() {
       children: [
         if (u != null) ...[
           SettingItem(
-            title: u!.phoneNumber,
+            title: "Personal Info",
             leadingIcon: "assets/icons/contact_phone.svg",
             bgIconColor: AppColor.blue,
+            onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PersonalInfo()),
+                      );
+            }
+          ),
+          _buildDivider(),
+          SettingItem(
+            title: "College Info",
+            leadingIcon: "assets/icons/contact_phone.svg",
+            bgIconColor: AppColor.blue,
+          ),
+          _buildDivider(),
+          SettingItem(
+            title: "History",
+            leadingIcon: "assets/icons/wallet.svg",
+            bgIconColor: AppColor.green,
           ),
           _buildDivider(),
           SettingItem(
@@ -180,11 +199,7 @@ Widget _buildProfile() {
             bgIconColor: AppColor.green,
           ),
           _buildDivider(),
-          SettingItem(
-            title: u!.email,
-            leadingIcon: "assets/icons/contact_email.svg",
-            bgIconColor: AppColor.primary,
-          ),
+         
         ] else ...[
           // Handle the case when u is null
           Text("Loading user data..."),
@@ -222,7 +237,7 @@ Widget _buildDivider() {
       child: Column(
         children: [
           SettingItem(
-            title: "Notification",
+            title: "Terms & Conditions",
             leadingIcon: "assets/icons/bell1.svg",
             bgIconColor: AppColor.purple,
           ),
@@ -238,11 +253,24 @@ Widget _buildDivider() {
             leadingIcon: "assets/icons/shield.svg",
             bgIconColor: AppColor.orange,
            onTap: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
                       );
                     },
+          ),
+          _buildDivider(),
+          SettingItem(
+            title: "Help Center",
+            leadingIcon: "assets/icons/bell1.svg",
+            bgIconColor: AppColor.purple,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 45),
+            child: Divider(
+              height: 0,
+              color: Colors.grey.withOpacity(0.8),
+            ),
           ),
         ],
       ),
