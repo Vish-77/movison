@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:movison/screens/MobileAuth/authprovider.dart' as MovisonAuthProvider; // Use an alias
+import 'package:movison/screens/CollegeInfo/clginfo.dart';
+import 'package:movison/screens/MobileAuth/authprovider.dart'
+    as MovisonAuthProvider; // Use an alias
 
 import 'package:movison/screens/MobileAuth/mobile_register.dart';
 import 'package:movison/screens/MobileAuth/usermodel.dart';
@@ -26,7 +28,8 @@ class _AccountPageState extends State<AccountPage> {
   bool isUserLoaded = false;
 
   void getData() async {
-    final ap = Provider.of<MovisonAuthProvider.AuthProvider>(context, listen: false); // Use the alias
+    final ap = Provider.of<MovisonAuthProvider.AuthProvider>(context,
+        listen: false); // Use the alias
 
     await ap.getDataFromSP();
     setState(() {
@@ -96,28 +99,29 @@ class _AccountPageState extends State<AccountPage> {
       ),
     );
   }
-Widget _buildProfile() {
-  return Column(
-    children: [
-      ProfilePic(),
-      const SizedBox(
-        height: 10,
-      ),
-      if (u != null && u!.name != null) ...[
-        Text(
-          u!.name!,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
+
+  Widget _buildProfile() {
+    return Column(
+      children: [
+        ProfilePic(),
+        const SizedBox(
+          height: 10,
         ),
-      ] else ...[
-        // Handle the case when u or u.name is null
-        Text("User name not available"),
+        if (u != null && u!.name != null) ...[
+          Text(
+            u!.name!,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ] else ...[
+          // Handle the case when u or u.name is null
+          Text("User name not available"),
+        ],
       ],
-    ],
-  );
-}
+    );
+  }
 
   Widget _buildRecord() {
     return Row(
@@ -152,72 +156,77 @@ Widget _buildProfile() {
   }
 
   Widget _buildSection1() {
-  return Container(
-    padding: const EdgeInsets.symmetric(horizontal: 15),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(5),
-      color: AppColor.cardColor,
-      boxShadow: [
-        BoxShadow(
-          color: AppColor.shadowColor.withOpacity(0.1),
-          spreadRadius: 1,
-          blurRadius: 1,
-          offset: Offset(0, 1), // changes position of shadow
-        ),
-      ],
-    ),
-    child: Column(
-      children: [
-        if (u != null) ...[
-          SettingItem(
-            title: "Personal Info",
-            leadingIcon: "assets/icons/contact_phone.svg",
-            bgIconColor: AppColor.blue,
-            onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PersonalInfo()),
-                      );
-            }
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: AppColor.cardColor,
+        boxShadow: [
+          BoxShadow(
+            color: AppColor.shadowColor.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 1,
+            offset: Offset(0, 1), // changes position of shadow
           ),
-          _buildDivider(),
-          SettingItem(
-            title: "College Info",
-            leadingIcon: "assets/icons/contact_phone.svg",
-            bgIconColor: AppColor.blue,
-          ),
-          _buildDivider(),
-          SettingItem(
-            title: "History",
-            leadingIcon: "assets/icons/wallet.svg",
-            bgIconColor: AppColor.green,
-          ),
-          _buildDivider(),
-          SettingItem(
-            title: "Payment",
-            leadingIcon: "assets/icons/wallet.svg",
-            bgIconColor: AppColor.green,
-          ),
-          _buildDivider(),
-         
-        ] else ...[
-          // Handle the case when u is null
-          Text("Loading user data..."),
         ],
-      ],
-    ),
-  );
-}
+      ),
+      child: Column(
+        children: [
+          if (u != null) ...[
+            SettingItem(
+                title: "Personal Info",
+                leadingIcon: "assets/icons/contact_phone.svg",
+                bgIconColor: AppColor.blue,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PersonalInfo()),
+                  );
+                }),
+            _buildDivider(),
+            SettingItem(
+                title: "College Info",
+                leadingIcon: "assets/icons/contact_phone.svg",
+                bgIconColor: AppColor.blue,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CollegeInfo()),
+                  );
+                }),
+            _buildDivider(),
+            SettingItem(
+              title: "History",
+              leadingIcon: "assets/icons/wallet.svg",
+              bgIconColor: AppColor.green,
+            ),
+            _buildDivider(),
+            SettingItem(
+              title: "Payment",
+              leadingIcon: "assets/icons/wallet.svg",
+              bgIconColor: AppColor.green,
+            ),
+            _buildDivider(),
+          ] else ...[
+            // Handle the case when u is null
+            Text("Loading user data..."),
+          ],
+        ],
+      ),
+    );
+  }
 
-Widget _buildDivider() {
-  return Padding(
-    padding: const EdgeInsets.only(left: 45),
-    child: Divider(
-      height: 0,
-      color: Colors.grey.withOpacity(0.8),
-    ),
-  );
-}
+  Widget _buildDivider() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 45),
+      child: Divider(
+        height: 0,
+        color: Colors.grey.withOpacity(0.8),
+      ),
+    );
+  }
 
   Widget _buildSection2() {
     return Container(
@@ -252,12 +261,12 @@ Widget _buildDivider() {
             title: "Privacy",
             leadingIcon: "assets/icons/shield.svg",
             bgIconColor: AppColor.orange,
-           onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
-                      );
-                    },
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+              );
+            },
           ),
           _buildDivider(),
           SettingItem(
@@ -296,13 +305,15 @@ Widget _buildDivider() {
         title: "Log Out",
         leadingIcon: "assets/icons/logout.svg",
         bgIconColor: AppColor.darker,
-        onTap: ()async => {
-                    await FirebaseAuth.instance.signOut(),
-                    //await storage.delete(key: "uid"),
-                    // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MobileLogin()), (route) => false)
-                    Navigator.pushAndRemoveUntil(
-                        context, MaterialPageRoute(builder: (context) => RegisterScreen()), (route) => false)
-                  },
+        onTap: () async => {
+          await FirebaseAuth.instance.signOut(),
+          //await storage.delete(key: "uid"),
+          // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MobileLogin()), (route) => false)
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => RegisterScreen()),
+              (route) => false)
+        },
       ),
     );
   }
