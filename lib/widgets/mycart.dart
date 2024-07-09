@@ -384,6 +384,7 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
                       MaterialPageRoute(
                         builder: (context) => RazorpayPayment(
                           amount: widget.product.price,
+                          bookName : widget.product.name
                         ),
                       ),
                     );

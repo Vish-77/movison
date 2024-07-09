@@ -6,12 +6,14 @@ import 'package:movison/screens/MobileAuth/authprovider.dart'
 
 import 'package:movison/screens/MobileAuth/mobile_register.dart';
 import 'package:movison/screens/MobileAuth/usermodel.dart';
+import 'package:movison/screens/Payment/paymenthist.dart';
 import 'package:movison/screens/Personal/personalInfo.dart';
 import 'package:movison/screens/Privacy/privacypolicy.dart';
 import 'package:movison/theme/color.dart';
 import 'package:movison/utils/data.dart';
 import 'package:movison/widgets/custom_image.dart';
 import 'package:movison/widgets/profile_pic.dart';
+import 'package:movison/widgets/razorpay_payment.dart';
 import 'package:movison/widgets/setting_box.dart';
 import 'package:movison/widgets/setting_item.dart';
 import 'package:provider/provider.dart';
@@ -207,6 +209,17 @@ class _AccountPageState extends State<AccountPage> {
               title: "Payment",
               leadingIcon: "assets/icons/wallet.svg",
               bgIconColor: AppColor.green,
+              onTap: () async {
+                List<Map<String, dynamic>> paymentHistory =
+                    await RazorpayPaymentState().getPaymentHistory();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PaymentHistoryScreen(paymentHistory: paymentHistory),
+                  ),
+                );
+              },
             ),
             _buildDivider(),
           ] else ...[

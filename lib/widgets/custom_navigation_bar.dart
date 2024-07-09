@@ -62,18 +62,7 @@ class CustomBottomNavBar extends StatelessWidget {
               //   },
               //
               // ),
-              IconBtnWithCounter(
-              
-                svgSrc: "assets/icons/bell1.svg",
-                numOfitem: 0, // here we have to edit
-                 press: () =>  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> AllCategoryPage()),),
-                //press: () =>  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> MarketView()),),
-              ),
-              IconButton(
-                icon: SvgPicture.asset("assets/icons/shopping_cart.svg"),
-
-               onPressed: () =>  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()),),
-              ),
+             
               IconButton(
                 icon: SvgPicture.asset(
                   "assets/icons/profile1.svg",
