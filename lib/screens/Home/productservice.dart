@@ -13,6 +13,9 @@ class ProductService {
     required String type,
     required File imageFile,
     required String description,
+     required String? univercity,
+    required String? branch,
+    required String? sem
   }) async {
     // Upload image to Firebase Storage and get download URL
     String imageUrl = await _uploadImage(imageFile,
@@ -26,6 +29,9 @@ class ProductService {
       'type': type,
       'imageUrl': imageUrl,
       'description': description, 
+      'univercity':univercity,
+      'branch':branch,
+      'sem':sem
     });
   }
 

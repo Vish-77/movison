@@ -1,17 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart'
     as MovisonAuthProvider; // Use an alias
 
-import 'package:movison/screens/MobileAuth/mobile_register.dart';
 import 'package:movison/screens/MobileAuth/usermodel.dart';
-import 'package:movison/screens/Privacy/privacypolicy.dart';
 import 'package:movison/theme/color.dart';
-import 'package:movison/utils/data.dart';
-import 'package:movison/widgets/custom_image.dart';
-import 'package:movison/widgets/profile_pic.dart';
-import 'package:movison/widgets/setting_box.dart';
-import 'package:movison/widgets/setting_item.dart';
 import 'package:provider/provider.dart';
 
 class PersonalInfo extends StatefulWidget {
@@ -33,8 +26,6 @@ class _PersonalInfo extends State<PersonalInfo> {
     setState(() {
       u = ap.userModel;
       isUserLoaded = true;
-      print(u!.email);
-      print(u!.name);
     });
   }
 
@@ -49,15 +40,16 @@ class _PersonalInfo extends State<PersonalInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 130, 98, 206),
         title: Text('Personal Information'),
       ),
-      body: _buildBody(),
+      body: Center(child: _buildBody()),
     );
   }
 
   Widget _buildBody() {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
           const SizedBox(
@@ -67,32 +59,18 @@ class _PersonalInfo extends State<PersonalInfo> {
           const SizedBox(
             height: 20,
           ),
-          _buildProfile(),
         ],
       ),
     );
   }
 
-  Widget _buildProfile() {
-    return Column(
-      children: [
-        CircleAvatar(
-          child: Image.network(u!.profilePic),
-          radius: 60
-        ),
-        const SizedBox(
-          height: 10,
-        ),
-      ],
-    );
-  }
 
   Widget _buildSection1() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: AppColor.cardColor,
+        borderRadius: BorderRadius.circular(10),
+        color: Color.fromARGB(255, 232, 222, 242),
         boxShadow: [
           BoxShadow(
             color: AppColor.shadowColor.withOpacity(0.1),
@@ -104,40 +82,80 @@ class _PersonalInfo extends State<PersonalInfo> {
       ),
       child: Column(
         children: [
+          const SizedBox(
+            height: 20,
+          ),
           if (u != null) ...[
-            if (u != null && u!.name != null) ...[
-              Text(
-                u!.name!,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+            if (u != null) ...[
+              Row(
+                children: [
+                  Text(
+                    "Name : ",
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    u!.name,
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
               ),
             ] else ...[
               // Handle the case when u or u.name is null
               Text("User name not available"),
             ],
-            _buildDivider(),
-            if (u != null && u!.name != null) ...[
-              Text(
-                u!.email,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+            const SizedBox(
+              height: 20,
+            ),
+            if (u != null) ...[
+              Row(
+                children: [
+                  Text(
+                    "Email : ",
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    u!.email,
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
               ),
             ] else ...[
               // Handle the case when u or u.name is null
               Text("User email not available"),
             ],
-            _buildDivider(),
-            if (u != null && u!.name != null) ...[
-              Text(
-                u!.phoneNumber,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+            const SizedBox(
+              height: 20,
+            ),
+            if (u != null) ...[
+              Row(
+                children: [
+                  Text(
+                    "Phone No : ",
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    u!.phoneNumber,
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
               ),
             ] else ...[
               // Handle the case when u or u.name is null
@@ -147,6 +165,30 @@ class _PersonalInfo extends State<PersonalInfo> {
             // Handle the case when u is null
             Text("Loading user data..."),
           ],
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+                children: [
+                  Text(
+                    "Bio : ",
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    u!.bio,
+                    style: GoogleFonts.lato(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              )
         ],
       ),
     );

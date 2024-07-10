@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:movison/screens/Payment/paymenthist.dart';
@@ -21,6 +23,8 @@ class RazorpayPayment extends StatefulWidget {
 class RazorpayPaymentState extends State<RazorpayPayment> {
   late DateTime _currentDateTime;
   late Razorpay _razorpay;
+  User? user=FirebaseAuth.instance.currentUser;
+  String currentUid='';
 
   @override
   void initState() {
@@ -30,11 +34,12 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
     _currentDateTime = DateTime.now();
+    currentUid=user!.uid;
   }
 
   void openCheckout() async {
     var options = {
-      'key': '',
+      'key': 'rzp_test_bEGj5afclhNOyT',
       'amount': widget.amount * 100,
       'name': 'Vishal Vijay Deshpande',
       'prefill': {'contact': '84216 70509', 'email': 'movison0320@gmail.com'},
@@ -49,27 +54,34 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
       debugPrint('Error : e');
     }
   }
+Future<void> savePaymentHistory(String status, String paymentId) async {
+  String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
+  String time = DateFormat('kk:mm').format(DateTime.now());
 
-  Future<void> savePaymentHistory(String status, String paymentId) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String date = DateFormat('dd-MM-yyyy').format(_currentDateTime);
-    String time = DateFormat('kk:mm').format(_currentDateTime);
-    
-    Map<String, dynamic> paymentData = {
-      'status': status,
-      'paymentId': paymentId,
-      'amount': widget.amount,
-      'bookName': widget.bookName,
-      'date': date,
-      'time': time
-    };
+  // Define your Firestore collection reference
+  CollectionReference paymentHistoryCollection =
+      FirebaseFirestore.instance.collection('paymentHistory');
 
-    String paymentHistory = prefs.getString('paymentHistory') ?? '[]';
-    List<dynamic> paymentHistoryList = jsonDecode(paymentHistory);
-    paymentHistoryList.add(paymentData);
+  // Prepare the payment data
+  Map<String, dynamic> paymentData = {
+    'userId':currentUid,
+    'status': status,
+    'paymentId': paymentId,
+    'amount': widget.amount, // Assuming widget.amount is accessible here
+    'bookName': widget.bookName, // Assuming widget.bookName is accessible here
+    'date': date,
+    'time': time,
+  };
 
-    prefs.setString('paymentHistory', jsonEncode(paymentHistoryList));
+  try {
+    // Add the payment data to Firestore
+    await paymentHistoryCollection.add(paymentData);
+    print('Payment history saved successfully!');
+  } catch (e) {
+    print('Failed to save payment history: $e');
+    // Handle any errors here
   }
+}
 
   void handlePaymentSuccess(PaymentSuccessResponse response) {
     savePaymentHistory('Success', response.paymentId!);
@@ -117,7 +129,7 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PaymentHistoryScreen(paymentHistory: paymentHistory),
+                  builder: (context) => PaymentHistoryScreen(currentUserId: currentUid,),
                 ),
               );
             },
@@ -125,7 +137,7 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 80, horizontal: 30),
+        padding: EdgeInsets.symmetric(vertical: 60, horizontal: 30),
         child: Column(
           children: [
             Container(

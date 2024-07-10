@@ -280,7 +280,8 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
             ),
 
             const SizedBox(height: 4),
-
+_buildBody(),
+            const SizedBox(height: 30,),
             Center(
               child: GestureDetector(
                 onTap: () async {
@@ -308,6 +309,9 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
                       type: productType,
                       imageFile: imageFile,
                       description: descriptionController.text,
+                      univercity: _univercityValue,
+                      branch:_branchValue,
+                      sem: _semesterValue
                     );
 
                     // Clear the form fields after submission
@@ -351,6 +355,153 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
             const SizedBox(height: 30),
           ],
         ),
+      ),
+    );
+  }
+  
+  String? _univercityValue;
+  String? _branchValue;
+  String? _semesterValue;
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                "Select University : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(width: 50,),
+              Container(height: 40,
+              width: 100,
+                decoration: BoxDecoration( 
+                  border: Border.all(width: 2,color: Colors.black)
+                ),
+                child: DropdownButton<String>(
+                  hint: const Text("Select"),
+                  alignment: AlignmentDirectional.center,
+                  value: _univercityValue,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _univercityValue = newValue!;
+                    });
+                  },
+                  items: <String>['SPPU', 'Mumbai', 'BATU', 'Other']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: GoogleFonts.lato(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10,),
+          Row(
+            children: [
+              Text(
+                "Select Branch : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(width: 75,),
+              Container(height: 40,
+              width: 100,
+                decoration: BoxDecoration( 
+                  border: Border.all(width: 2,color: Colors.black)
+                ),
+                child: DropdownButton<String>(
+                  hint: const Text("Select"),
+                  alignment: AlignmentDirectional.center,
+                  value: _branchValue,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _branchValue = newValue!;
+                    });
+                  },
+                  items: <String>['CS', 'IT', 'ENTC', 'Mec', 'Civil']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: GoogleFonts.lato(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10,),
+          Row(
+            children: [
+              Text(
+                "Select Semester : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(width: 57,),
+              Container(
+                height: 40,
+              width: 100,
+                decoration: BoxDecoration( 
+                  border: Border.all(width: 2,color: Colors.black)
+                ),
+                child: DropdownButton<String>(
+                  hint: const Text("Select"),
+                  alignment: AlignmentDirectional.center,
+                  value: _semesterValue,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _semesterValue = newValue!;
+                    });
+                  },
+                  items: <String>[
+                    'I',
+                    'II',
+                    'III',
+                    'IV',
+                    'V',
+                    'VI',
+                    'VII',
+                    'VIII'
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(
+                        value,
+                        style: GoogleFonts.lato(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

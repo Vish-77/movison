@@ -169,6 +169,9 @@ void storeData() async {
       createdAt: "",
       phoneNumber: "",
       uid: "",
+      univercity: '',
+      branch: '',
+      sem: ''
     );
     if (image != null) {
       ap.saveUserDataToFirebase(

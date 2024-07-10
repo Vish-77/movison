@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PrivacyPolicyPage extends StatelessWidget {
   @override
@@ -20,6 +21,10 @@ class PrivacyPolicyPage extends StatelessWidget {
                   child: Text(
                     "Welcome to Movison. This Privacy Policy is designed to help you understand how we collect, use, and safeguard your personal information when you use our mobile application and services.",
                     textAlign: TextAlign.justify,
+                    style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                   ),
                 ),
                 SizedBox(
@@ -39,11 +44,15 @@ class PrivacyPolicyPage extends StatelessWidget {
                     "     - Name\n"
                     "     - Address\n"
                     "     - Identification documents (for verification purposes)\n"
-                    "     - Contact information, including email address and phone number\n"
+                    "      - Contact information, including email address and phone number\n"
                     "     - Payment information (credit card details, etc.)\n\n"
                     "2. Usage Data:\n"
                     "   - We may also collect information on how the application is accessed and used ('Usage Data'). This Usage Data may include information such as your device's Internet Protocol address (e.g., IP address), device type, browser type, the pages of our application that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers, and other diagnostic data.",
                     textAlign: TextAlign.justify,
+                    style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                   ),
                 ),
                 SizedBox(
@@ -66,6 +75,10 @@ class PrivacyPolicyPage extends StatelessWidget {
                     "- To monitor the usage of our application.\n"
                     "- To detect, prevent and address technical issues.",
                     textAlign: TextAlign.justify,
+                     style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                   ),
                 ),
                 SizedBox(
@@ -85,6 +98,10 @@ class PrivacyPolicyPage extends StatelessWidget {
                     "- To comply with legal obligations.\n"
                     "- To protect and defend our rights or property.",
                     textAlign: TextAlign.justify,
+                     style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                   ),
                 ),
                 SizedBox(
@@ -101,6 +118,10 @@ class PrivacyPolicyPage extends StatelessWidget {
                   child: Text(
                     "The security of your data is important to us, but remember that no method of transmission over the Internet, or method of electronic storage is 100% secure.",
                     textAlign: TextAlign.justify,
+                     style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                   ),
                 ),
                 SizedBox(
@@ -117,6 +138,10 @@ class PrivacyPolicyPage extends StatelessWidget {
                   child: Text(
                     "By email: krishakfarma@gmail.com",
                     textAlign: TextAlign.justify,
+                     style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
                   ),
                 ),
                 SizedBox(

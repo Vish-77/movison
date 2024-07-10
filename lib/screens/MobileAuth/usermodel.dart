@@ -8,7 +8,9 @@ class UserModel {
   String createdAt;
   String phoneNumber;
   String uid;
-
+  String univercity;
+  String branch;
+  String sem;
   UserModel({
     required this.name,
     required this.email,
@@ -17,6 +19,9 @@ class UserModel {
     required this.createdAt,
     required this.phoneNumber,
     required this.uid,
+    required this.univercity,
+    required this.branch,
+    required this.sem
   });
 
   // from map
@@ -29,6 +34,9 @@ class UserModel {
       phoneNumber: map['phoneNumber'] ?? '',
       createdAt: map['createdAt'] ?? '',
       profilePic: map['profilePic'] ?? '',
+      univercity: map['univercity'] ?? '',
+      branch: map['branch']?? '',
+      sem: map['sem']?? ''
     );
   }
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -44,6 +52,9 @@ class UserModel {
       "profilePic": profilePic,
       "phoneNumber": phoneNumber,
       "createdAt": createdAt,
+      "univercity":univercity,
+      "branch":branch,
+      "sem":sem
     };
   }
 }

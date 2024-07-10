@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -181,6 +182,9 @@ class AuthProvider extends ChangeNotifier {
         uid: snapshot['uid'],
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],
+        univercity: snapshot['univercity'] ,
+      branch: snapshot['branch'],
+      sem: snapshot['sem']
       );
       _uid = userModel.uid;
     });
@@ -211,7 +215,7 @@ class AuthProvider extends ChangeNotifier {
   // Assuming UserModel.fromMap method is implemented to convert Firestore data to UserModel object
 
   Future<void> updateProfile(
-      BuildContext context, String name, String bio, File? profilePic) async {
+      BuildContext context, String name, String? email,String bio, File? profilePic, String? univercity,String? branch,String? sem) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -235,7 +239,11 @@ class AuthProvider extends ChangeNotifier {
 
       // Update name and bio in the userModel
       _userModel!.name = name;
+      _userModel!.email=email!;
       _userModel!.bio = bio;
+      _userModel!.univercity=univercity!;
+      _userModel!.branch=branch!;
+      _userModel!.sem=sem!;
 
       // If a new profile picture is provided, upload it to Firebase Storage
       if (profilePic != null) {
@@ -249,6 +257,9 @@ class AuthProvider extends ChangeNotifier {
           .collection("users")
           .doc(currentUser1.uid)
           .update(_userModel!.toMap());
+
+        log("Update sucessfully");
+        saveUserDataToSP();
 
       // Save the updated user data to Firebase
       // saveUserDataToFirebase(

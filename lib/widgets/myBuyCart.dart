@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -8,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movison/screens/Home/ProductModel.dart';
 import 'package:movison/widgets/razorpay_payment.dart';
 
-class CartScreen extends StatelessWidget {
+class CartBuyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Get the current user ID
@@ -18,7 +17,7 @@ class CartScreen extends StatelessWidget {
       // Handle the case where the user is not signed in
       return Scaffold(
         appBar: AppBar(
-          title: const Text('My Cart'),
+          title: const Text('My Buy Cart'),
         ),
         body: const Center(
           child: Text('Please sign in to view your cart.'),
@@ -31,7 +30,7 @@ class CartScreen extends StatelessWidget {
         appBar: AppBar( 
           centerTitle: true,
           title:Text(
-                    "My Rent Cart",
+                    "My Buy Cart",
                     style: GoogleFonts.ubuntu(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
@@ -45,7 +44,7 @@ class CartScreen extends StatelessWidget {
             top: 10,
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('cart_Rent')
+                  .collection('cart_Buy')
                   .where('userId', isEqualTo: currentUserId)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -81,7 +80,7 @@ class CartScreen extends StatelessWidget {
                       onDismissed: (direction) async {
                         // Remove the item from the cart when dismissed
                         await FirebaseFirestore.instance
-                            .collection('cart_Rent')
+                            .collection('cart_Buy')
                             .doc(cartDocs[index].id)
                             .delete();
                       },
@@ -142,7 +141,7 @@ class CartScreen extends StatelessWidget {
                                 backgroundImage:
                                     NetworkImage(data['imageUrl'])),
                             title: Text(data['name']),
-                            subtitle: Text('\u{20B9}${data['price']}'),
+                            subtitle: Text('\u{20B9} ${data['price']}'),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
@@ -152,7 +151,7 @@ class CartScreen extends StatelessWidget {
 
                                 // Remove the item from the cart when the remove icon is pressed
                                 await FirebaseFirestore.instance
-                                    .collection('cart')
+                                    .collection('cart_Buy')
                                     .doc(cartDocs[index].id)
                                     .delete();
 
@@ -166,7 +165,7 @@ class CartScreen extends StatelessWidget {
                                       onPressed: () async {
                                         // Undo action: Re-add the product to the cart
                                         await FirebaseFirestore.instance
-                                            .collection('cart')
+                                            .collection('cart_Buy')
                                             .add(
                                               removedProduct.data() as Map<
                                                   String,
@@ -228,10 +227,8 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
   void addToCart(BuildContext context, Product product) async {
     try {
       // Check if the product is already in the cart
-      log(currentUserId as num);
       QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
-          .collection('cart_Rent')
-          .where('userId', isEqualTo: currentUserId)
+          .collection('cart_Buy')
           .where('id', isEqualTo: product.id)
           .get();
 
@@ -244,7 +241,7 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
         );
       } else {
         // If the product is not in the cart, add it to Firestore
-        await FirebaseFirestore.instance.collection('cart_Rent').add({
+        await FirebaseFirestore.instance.collection('cart_Buy').add({
           'id': product.id,
           'name': product.name,
           'price': product.price,
@@ -319,7 +316,7 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
               ),
             ),
             Text(
-              '\u{20B9} ${widget.product.price.toStringAsFixed(2)}',
+              'u{20B9} ${widget.product.price.toStringAsFixed(2)}',
               style: GoogleFonts.ubuntu(
                 fontWeight: FontWeight.w400,
                 fontSize: 15,
@@ -363,7 +360,7 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
                 fontSize: 16,
               ),
             ),
-                 const Divider(
+               const Divider(
               color: Colors.black26,
               thickness: 2,
               height: 20,

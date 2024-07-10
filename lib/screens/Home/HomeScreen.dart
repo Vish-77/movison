@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movison/screens/Home/Availablebooks.dart';
 import 'package:movison/screens/Home/addbooks.dart';
-import 'package:movison/screens/Home/allBooks.dart';
+import 'package:movison/screens/Home/comminggrid.dart';
 import 'package:movison/size_config.dart';
 import 'package:movison/theme/color.dart';
 import 'package:movison/utils/data.dart';
@@ -86,53 +86,6 @@ class _HomePageState extends State<HomeScreen> {
     );
   }
 
-  // _buildCategories() {
-  //   return SingleChildScrollView(
-  //     padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-  //     scrollDirection: Axis.horizontal,
-  //     child: Row(
-  //       children: List.generate(
-  //         categories.length,
-  //         (index) => Padding(
-  //           padding: const EdgeInsets.only(right: 15),
-  //           child: CategoryBox(
-  //             selectedColor: Colors.white,
-  //             data: categories[index],
-  //             onTap: () {
-  //               _onCategoryTap(categories[index]);
-  //             },
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // void _onCategoryTap(Map<String, dynamic> categoryData) {
-  //   // Navigate to the corresponding category page based on the category name
-  //   print("onswitch");
-  //   switch (categoryData["name"]) {
-  //     case "Rent":
-  //       // Navigate to the "All" category page
-  //       Navigator.pushNamed(context, '/all_rent');
-  //       break;
-  //      case "Buy":
-  //       // Navigate to the "All" category page
-  //       Navigator.pushNamed(context, '/all_buy');
-  //       break;
-  //     case "Add Info":
-  //       Navigator.pushNamed(context, '/add_student_details');
-  //       break;
-  //     case "TimeLeft":
-  //       Navigator.pushNamed(context, '/book_purchase_details');
-  //       break;
-
-  //     // Add cases for other categories as needed
-  //     default:
-  //       // Navigate to a default page or handle accordingly
-  //       break;
-  //   }
-  // }
 }
 
 class CategorySection extends StatefulWidget {
@@ -293,7 +246,7 @@ class Body extends StatelessWidget {
             SizedBox(height: getProportionateScreenWidth(10)),
             //HomeHeader(),
             CustomAppBar(),
-            SizedBox(height: getProportionateScreenWidth(30)),
+            SizedBox(height: getProportionateScreenWidth(20)),
             Padding(
               padding: const EdgeInsets.only(left: 30.0, right: 30),
               child: SizedBox(
@@ -319,14 +272,14 @@ class Body extends StatelessWidget {
                     }),
               ),
             ),
-            SizedBox(height: getProportionateScreenWidth(30)),
+            SizedBox(height: getProportionateScreenWidth(20)),
             CategorySection(),
-            SizedBox(height: getProportionateScreenWidth(30)),
+            SizedBox(height: getProportionateScreenWidth(20)),
             
             SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.30,
+                        height: MediaQuery.of(context).size.height * 0.35,
                        width: MediaQuery.of(context).size.width,
-                        child: AllProductsList(),
+                        child: CommingList(),
                       ),
           ],
         ),

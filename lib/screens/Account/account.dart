@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movison/screens/CollegeInfo/clginfo.dart';
+import 'package:movison/screens/History/history.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart'
     as MovisonAuthProvider; // Use an alias
 
@@ -10,10 +11,7 @@ import 'package:movison/screens/Payment/paymenthist.dart';
 import 'package:movison/screens/Personal/personalInfo.dart';
 import 'package:movison/screens/Privacy/privacypolicy.dart';
 import 'package:movison/theme/color.dart';
-import 'package:movison/utils/data.dart';
-import 'package:movison/widgets/custom_image.dart';
 import 'package:movison/widgets/profile_pic.dart';
-import 'package:movison/widgets/razorpay_payment.dart';
 import 'package:movison/widgets/setting_box.dart';
 import 'package:movison/widgets/setting_item.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +35,7 @@ class _AccountPageState extends State<AccountPage> {
     setState(() {
       u = ap.userModel;
       isUserLoaded = true;
-      print(u!.email);
+      print(u!.profilePic);
       print(u!.name);
     });
   }
@@ -53,14 +51,14 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Account'),
+        title: const Text('Account'),
       ),
       body: _buildBody(),
     );
   }
 
   _buildHeader() {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -77,7 +75,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget _buildBody() {
     return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         children: [
           _buildProfile(),
@@ -105,28 +103,28 @@ class _AccountPageState extends State<AccountPage> {
   Widget _buildProfile() {
     return Column(
       children: [
-        ProfilePic(),
+        const ProfilePic(),
         const SizedBox(
           height: 10,
         ),
-        if (u != null && u!.name != null) ...[
+        if (u != null) ...[
           Text(
-            u!.name!,
-            style: TextStyle(
+            u!.name,
+            style:const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
           ),
         ] else ...[
           // Handle the case when u or u.name is null
-          Text("User name not available"),
+          const Text("User name not available"),
         ],
       ],
     );
   }
 
   Widget _buildRecord() {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
@@ -135,7 +133,7 @@ class _AccountPageState extends State<AccountPage> {
             icon: "assets/icons/work.svg",
           ),
         ),
-        const SizedBox(
+        SizedBox(
           width: 10,
         ),
         Expanded(
@@ -144,7 +142,7 @@ class _AccountPageState extends State<AccountPage> {
             icon: "assets/icons/time.svg",
           ),
         ),
-        const SizedBox(
+        SizedBox(
           width: 10,
         ),
         Expanded(
@@ -168,7 +166,7 @@ class _AccountPageState extends State<AccountPage> {
             color: AppColor.shadowColor.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 1,
-            offset: Offset(0, 1), // changes position of shadow
+            offset: const Offset(0, 1), // changes position of shadow
           ),
         ],
       ),
@@ -203,6 +201,14 @@ class _AccountPageState extends State<AccountPage> {
               title: "History",
               leadingIcon: "assets/icons/wallet.svg",
               bgIconColor: AppColor.green,
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                     builder: (context) => HistoryScreen(currentUserId: u!.userId,),
+                  ),
+                );
+              },
             ),
             _buildDivider(),
             SettingItem(
@@ -210,13 +216,10 @@ class _AccountPageState extends State<AccountPage> {
               leadingIcon: "assets/icons/wallet.svg",
               bgIconColor: AppColor.green,
               onTap: () async {
-                List<Map<String, dynamic>> paymentHistory =
-                    await RazorpayPaymentState().getPaymentHistory();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        PaymentHistoryScreen(paymentHistory: paymentHistory),
+                     builder: (context) => PaymentHistoryScreen(currentUserId: u!.userId,),
                   ),
                 );
               },
@@ -224,7 +227,7 @@ class _AccountPageState extends State<AccountPage> {
             _buildDivider(),
           ] else ...[
             // Handle the case when u is null
-            Text("Loading user data..."),
+            const Text("Loading user data..."),
           ],
         ],
       ),
@@ -252,13 +255,13 @@ class _AccountPageState extends State<AccountPage> {
             color: AppColor.shadowColor.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 1,
-            offset: Offset(0, 1), // changes position of shadow
+            offset: const Offset(0, 1), // changes position of shadow
           ),
         ],
       ),
       child: Column(
         children: [
-          SettingItem(
+          const SettingItem(
             title: "Terms & Conditions",
             leadingIcon: "assets/icons/bell1.svg",
             bgIconColor: AppColor.purple,
@@ -282,7 +285,7 @@ class _AccountPageState extends State<AccountPage> {
             },
           ),
           _buildDivider(),
-          SettingItem(
+          const SettingItem(
             title: "Help Center",
             leadingIcon: "assets/icons/bell1.svg",
             bgIconColor: AppColor.purple,
@@ -310,7 +313,7 @@ class _AccountPageState extends State<AccountPage> {
             color: AppColor.shadowColor.withOpacity(0.1),
             spreadRadius: 1,
             blurRadius: 1,
-            offset: Offset(0, 1), // changes position of shadow
+            offset: const Offset(0, 1), // changes position of shadow
           ),
         ],
       ),
@@ -324,7 +327,7 @@ class _AccountPageState extends State<AccountPage> {
           // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MobileLogin()), (route) => false)
           Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => RegisterScreen()),
+              MaterialPageRoute(builder: (context) => const RegisterScreen()),
               (route) => false)
         },
       ),

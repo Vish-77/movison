@@ -1,17 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart'
     as MovisonAuthProvider; // Use an alias
 
-import 'package:movison/screens/MobileAuth/mobile_register.dart';
 import 'package:movison/screens/MobileAuth/usermodel.dart';
-import 'package:movison/screens/Privacy/privacypolicy.dart';
 import 'package:movison/theme/color.dart';
-import 'package:movison/utils/data.dart';
-import 'package:movison/widgets/custom_image.dart';
-import 'package:movison/widgets/profile_pic.dart';
-import 'package:movison/widgets/setting_box.dart';
-import 'package:movison/widgets/setting_item.dart';
 import 'package:provider/provider.dart';
 
 class CollegeInfo extends StatefulWidget {
@@ -33,8 +26,6 @@ class _CollegeInfo extends State<CollegeInfo> {
     setState(() {
       u = ap.userModel;
       isUserLoaded = true;
-      print(u!.email);
-      print(u!.name);
     });
   }
 
@@ -48,15 +39,30 @@ class _CollegeInfo extends State<CollegeInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('College Information'),
-      ),
-      body: _buildBody(),
-    );
+        appBar: AppBar(
+          backgroundColor: Color.fromARGB(255, 130, 98, 206),
+          title: Text('College Information'),
+        ),
+        body: Center(
+          child: Container(
+            width: 300,
+            height: 200,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Color.fromARGB(255, 232, 222, 242),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColor.shadowColor.withOpacity(0.1),
+                    spreadRadius: 1,
+                    blurRadius: 1,
+                    offset: Offset(0, 1), // changes position of shadow
+                  ),
+                ],
+              ),
+              child: _buildBody()),
+        ));
   }
-  String? _univercityValue = null;
-  String? _branchValue = null;
-  String? _semesterValue = null;
 
   Widget _buildBody() {
     return Padding(
@@ -65,87 +71,64 @@ class _CollegeInfo extends State<CollegeInfo> {
         children: [
           Row(
             children: [
-              const Text("Select University : ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20
+              Text(
+                "University : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
               ),
-              DropdownButton<String>(
-               hint: const Text("Select"),
-               alignment: AlignmentDirectional.center,
-               value: _univercityValue,
-               onChanged: (String? newValue) {
-                 setState(() {
-                   _univercityValue = newValue!;
-                 });
-               },
-               items: <String>['SPPU', 'Mumbai', 'BATU', 'Other']
-                   .map<DropdownMenuItem<String>>((String value) {
-                 return DropdownMenuItem<String>(
-                   value: value,
-                   child: Text(value),
-                 );
-               }).toList(),
-             ),
+              Text(
+                u!.univercity,
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
             ],
           ),
-
-          Row(
-            children: [
-              const Text("Select Branch : ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20
-                ),
-              ),
-              DropdownButton<String>(
-               hint: const Text("Select"),
-               alignment: AlignmentDirectional.center,
-               value: _branchValue,
-               onChanged: (String? newValue) {
-                 setState(() {
-                   _branchValue = newValue!;
-                 });
-               },
-               items: <String>['CS', 'IT', 'ENTC', 'Mec', 'Civil']
-                   .map<DropdownMenuItem<String>>((String value) {
-                 return DropdownMenuItem<String>(
-                   value: value,
-                   child: Text(value),
-                 );
-               }).toList(),
-             ),
-            ],
+          const SizedBox(
+            height: 10,
           ),
           Row(
             children: [
-              const Text("Select Semester : ",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20
+              Text(
+                "Branch : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
                 ),
               ),
-              DropdownButton<String>(
-               hint: const Text("Select"),
-               alignment: AlignmentDirectional.center,
-               value: _semesterValue,
-               onChanged: (String? newValue) {
-                 setState(() {
-                   _semesterValue = newValue!;
-                 });
-               },
-               items: <String>['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII']
-                   .map<DropdownMenuItem<String>>((String value) {
-                 return DropdownMenuItem<String>(
-                   value: value,
-                   child: Text(value),
-                 );
-               }).toList(),
-             ),
+              Text(
+                u!.branch,
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
             ],
           ),
-          
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            children: [
+              Text(
+                "Semester : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                u!.sem,
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

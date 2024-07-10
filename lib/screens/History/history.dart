@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class PaymentHistoryScreen extends StatelessWidget {
+class HistoryScreen extends StatelessWidget {
   final String currentUserId;
 
-  const PaymentHistoryScreen({super.key, required this.currentUserId});
+  const HistoryScreen({super.key, required this.currentUserId});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +16,7 @@ class PaymentHistoryScreen extends StatelessWidget {
         stream: FirebaseFirestore.instance
             .collection('paymentHistory')
             .where('userId', isEqualTo: currentUserId)
+            .where('status', isEqualTo: "Success")
             .orderBy('date', descending: true)
             .orderBy('time', descending: true)
             .snapshots(),

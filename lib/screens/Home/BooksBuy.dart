@@ -1,148 +1,141 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:movison/widgets/mycart.dart';
+import 'package:movison/screens/Home/ProductModel.dart';
+import 'package:movison/widgets/myBuyCart.dart';
 
-class Product {
-  final String imageUrl;
-  final String name;
-  final double price;
-  final String type;
-  final String userId;
-  final String description;
-  final String id;
-
-  Product({
-    required this.imageUrl,
-    required this.name,
-    required this.price,
-    required this.type,
-    required this.userId,
-    required this.description,
-    required this.id,
-  });
-
-  factory Product.fromFirestore(DocumentSnapshot doc) {
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    return Product(
-      id: doc.id,
-      imageUrl: data['imageUrl'] ?? '',
-      name: data['name'] ?? '',
-      price: (data['price'] ?? 0).toDouble(),
-      type: data['type'] ?? '',
-      userId: data['userId'] ?? '',
-      description: data['description'] ?? '',
-    );
-  }
+class BuyList extends StatefulWidget {
+  @override
+  State createState() => _ProductListState();
 }
-class BuyList extends StatelessWidget {
+
+class _ProductListState extends State {
   final CollectionReference productsCollection =
       FirebaseFirestore.instance.collection('products');
-       final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+  final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
+  String searchQuery = '';
+  List<Product> filteredProducts = [];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
-                  "Books For Buy",
-                  style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                  ),
-                ),
+          title: const Text("Books for Buy"),
+          leading: IconButton(
+            onPressed: (){
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),),
         ),
-        body: Stack(children: [
-          
-           Positioned.fill(
-            top: 0,
-            child: FutureBuilder<QuerySnapshot>(
-              future: productsCollection.get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-
-                if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                }
-
-                List<Product> products = snapshot.data!.docs
-                    .map((DocumentSnapshot document) =>
-                        Product.fromFirestore(document))
-                    .where((product) => product.type.toLowerCase() == 'buy')
-                    .toList();
-
-                // Sort products by name
-                products.sort((a, b) {
-                  return a.name.compareTo(b.name);
-                });
-
-                if (products.isNotEmpty) {
-                  return ListView.builder(
-                    itemCount: (products.length / 2).ceil(),
-                    itemBuilder: (context, index) {
-                      int startIndex = index * 2;
-                      int endIndex = (index + 1) * 2;
-                      if (endIndex > products.length) {
-                        endIndex = products.length;
-                      }
-
-                      List<Product> rowProducts =
-                          products.sublist(startIndex, endIndex);
-
-                      // If this is the last row and it contains only one product, align it to the left
-                      if (rowProducts.length == 1 &&
-                          endIndex == products.length) {
-                        return ProductCardRow(
-                          products: rowProducts,
-                          addToCart: addToCart,
-                          alignLeft: true,
-                        );
-                      } else {
-                        return ProductCardRow(
-                          products: rowProducts,
-                          addToCart: addToCart,
-                        );
-                      }
-                    },
-                  );
-                } else {
-                  return const Center(
-                    child: Text(''),
-                  );
-                }
-              },
+        floatingActionButton: FloatingActionButton(onPressed: (){
+             Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CartBuyScreen()),
+                    );
+        }, child:SvgPicture.asset("assets/icons/shopping_cart.svg"),),
+        body: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              height: 40,
+              decoration: BoxDecoration(
+                  //color: const Color.fromARGB(255, 245, 194, 116),
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
+                  border: Border.all(width: 1.5)),
+              child: TextField(
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value;
+                  });
+                },
+                decoration: const InputDecoration(
+                  hintText: "Search....",
+                  prefixIcon: Icon(Icons.search),
+                  border: InputBorder.none,
+                ),
+              ),
             ),
-          ),
-        ]));
+            Expanded(
+              child: FutureBuilder<QuerySnapshot>(
+                future: productsCollection.get(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const  Center(
+                      child: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator())
+                      );
+                  }
+
+                  if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  }
+
+                  List<Product> products = snapshot.data!.docs
+                      .map((DocumentSnapshot document) =>
+                          Product.fromFirestore(document))
+                      .toList();
+
+                  filteredProducts = products
+  .where((product) =>
+      product.type.toLowerCase() == 'buy' && // Only include products of type 'rent'
+      (product.name.toLowerCase().contains(searchQuery.toLowerCase()) ||
+      product.type.toLowerCase().contains(searchQuery.toLowerCase())  ||
+      product.univercity.toLowerCase().contains(searchQuery.toLowerCase())||
+      product.branch.toLowerCase().contains(searchQuery.toLowerCase()) ||
+      product.sem.toLowerCase().contains(searchQuery.toLowerCase())))
+  .toList();
+
+                  if (filteredProducts.isNotEmpty) {
+                    return GridView.builder(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2, // Number of columns
+                        //childAspectRatio: 3 / 2, // Aspect ratio of the items
+                        crossAxisSpacing: 10, // Spacing between columns
+                        mainAxisSpacing: 10, // Spacing between rows
+                      ),
+                      itemCount: filteredProducts.length,
+                      itemBuilder: (context, index) {
+                        return ProductCard(
+                          product: filteredProducts[index],
+                          addToCart: addToCart,
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text('No products found'));
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
-  Future<void> addToCart(BuildContext context, Product product) async {
+
+  void addToCart(BuildContext context, Product product) async {
     try {
-      // Check if the product is already in the cart
       QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
-          .collection('cart')
+          .collection('cart_Buy')
           .where('id', isEqualTo: product.id)
+          .where('userId', isEqualTo: currentUserId)
           .get();
 
       if (cartSnapshot.docs.isNotEmpty) {
-        // If the product is already in the cart, show a tooltip
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('${product.name} is already in your cart.'),
           ),
         );
-        //Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()));
       } else {
-        // If the product is not in the cart, add it to Firestore
-        await FirebaseFirestore.instance.collection('cart').add({
+        await FirebaseFirestore.instance.collection('cart_Buy').add({
           'id': product.id,
           'name': product.name,
           'price': product.price,
@@ -150,7 +143,6 @@ class BuyList extends StatelessWidget {
           'ProductId': product.userId,
           'Description': product.description,
           'userId': currentUserId,
-          // Add other fields as needed
         });
         print('Added ${product.name} to cart');
         ScaffoldMessenger.of(context).showSnackBar(
@@ -158,42 +150,10 @@ class BuyList extends StatelessWidget {
             content: Text('${product.name} added to your cart.'),
           ),
         );
-        
       }
     } catch (e) {
       print('Error adding product to cart: $e');
     }
-  }
-
-}
-class ProductCardRow extends StatelessWidget {
-  final List<Product> products;
-   final Function(BuildContext, Product) addToCart;
-  final bool alignLeft;
-
-  const ProductCardRow({
-    Key? key,
-    required this.products,
-    required this.addToCart,
-    this.alignLeft = true,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment:
-          alignLeft ? MainAxisAlignment.start : MainAxisAlignment.center,
-      children: products
-          .map(
-        (product) => Expanded(
-          child: ProductCard(product: product, addToCart: addToCart),
-        ),
-      )
-          .followedBy([
-        // Add an empty Expanded if there is only one product
-        if (products.length == 1) Expanded(child: Container()),
-      ]).toList(),
-    );
   }
 }
 
@@ -201,99 +161,92 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final Function(BuildContext, Product) addToCart;
 
-  const ProductCard({Key? key, required this.product, required this.addToCart})
-      : super(key: key);
+  const ProductCard({
+    required this.product,
+    required this.addToCart,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Navigate to ProductDetailScreen when the product is tapped
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(product: product),
-          ),
-        );
-      },
-      child: Card(
-        
-        margin: const EdgeInsets.all(14.0),
-        clipBehavior: Clip.antiAlias,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: MediaQuery.of(context).size.width * 0.0028,
-            color: const Color(0xFF02B153),
-          ),
-          borderRadius: BorderRadius.circular(
-            MediaQuery.of(context).size.width * 0.0444,
-          ),
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProductDetailScreen(product: product),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height * 0.1396,
-              decoration: BoxDecoration(
-                image: product.imageUrl.isNotEmpty
-                    ? DecorationImage(
-                        image: NetworkImage(product.imageUrl),
-                        fit: BoxFit.fill,
-                      )
-                    : null, // No image if 'imageUrl' is empty
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                ),
-              ),
+      ), // Wrap the function call
+      child: Padding(
+        padding: const EdgeInsets.only(
+            //right: 15.0,
+            left: 10),
+        child: SizedBox(
+          width: 180,
+          height: 188, // Provide a fixed width here
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(16), // Adjust border radius as needed
+              // You can also set other properties like border color and width here
+              // For example:
+              side: const BorderSide(color: Colors.grey, width: 2),
             ),
-            Container(
-              width: 10,
-              height: 30,
-              margin: const EdgeInsets.only(top:15,bottom: 5,left: 15,right: 15),
-              child: ElevatedButton(
-                onPressed: ()async {
-                  // Call addToCart method when the button is pressed
-                  await addToCart(context, product);
-                  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()),);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
+            elevation: 4,
+            margin: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.1396,
+                  decoration: BoxDecoration(
+                    image: product.imageUrl.isNotEmpty
+                        ? DecorationImage(
+                            image: NetworkImage(product.imageUrl),
+                            fit: BoxFit.fill,
+                          )
+                        : null, // No image if 'imageUrl' is empty
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(16),
+                      topRight: Radius.circular(16),
+                    ),
+                    // border: Border.all(width: 2)
+                  ),
                 ),
-                child: Text(
-                  'Add to Cart',
+                SizedBox(
+                    height: 20,
+                    width: 100,
+                    child: Center(
+                      child: Text(
+                        product.name,
+                        textAlign: TextAlign.justify,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
+                      ),
+                    )),
+                SizedBox(
+                    height: 20,
+                    width: 100,
+                    child: Center(
+                      child: Text(
+                        product.type,
+                        textAlign: TextAlign.justify,
+                        style: GoogleFonts.poppins(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),
+                      ),
+                    )),
+                Center(
+                    child: Text(
+                  '\u{20B9}${product.price}/kg',
                   style: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w400,
                     fontSize: 12,
                   ),
-                ),
-              ),
+                ))
+              ],
             ),
-            SizedBox(
-                height: 20,
-                width: 100,
-                child: Center(
-                  child: Text(
-                    product.name,
-                    textAlign: TextAlign.justify,
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                    ),
-                  ),
-                )),
-            Center(
-                child: Text(
-              '\u{20B9}${product.price}/kg',
-              style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w400,
-                fontSize: 12,
-              ),
-            )),
-            const SizedBox( 
-              height: 4.6,
-            )
-          ],
+          ),
         ),
       ),
     );
@@ -336,7 +289,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     try {
       // Check if the product is already in the cart
       QuerySnapshot cartSnapshot = await FirebaseFirestore.instance
-          .collection('cart')
+          .collection('cart_Buy')
+          .where('userId', isEqualTo: currentUserId)
           .where('id', isEqualTo: product.id)
           .get();
 
@@ -350,7 +304,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         //Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()));
       } else {
         // If the product is not in the cart, add it to Firestore
-        await FirebaseFirestore.instance.collection('cart').add({
+        await FirebaseFirestore.instance.collection('cart_Buy').add({
           'id': product.id,
           'name': product.name,
           'price': product.price,
@@ -366,7 +320,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             content: Text('${product.name} added to your cart.'),
           ),
         );
-        
       }
     } catch (e) {
       print('Error adding product to cart: $e');
@@ -385,18 +338,22 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-       title: Text(
-                "Book Details",
-                style: GoogleFonts.ubuntu(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
-                ),
-              ),
+        title: Text(
+          "Book Details",
+          style: GoogleFonts.ubuntu(
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const SizedBox(
+              height: 50,
+            ),
             Container(
               margin: const EdgeInsets.only(left: 30, right: 30, bottom: 20),
               width: MediaQuery.of(context).size.width,
@@ -413,6 +370,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       topRight: Radius.circular(16),
                       bottomLeft: Radius.circular(16),
                       bottomRight: Radius.circular(16)),
+                  side: BorderSide(color: Colors.grey, width: 2),
                 ),
               ),
             ),
@@ -451,16 +409,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: Text(
                     widget.product.description,
                     textAlign: TextAlign.center,
+                    style: GoogleFonts.ubuntu(
+                fontWeight: FontWeight.w400,
+                fontSize: 16,
+              ),
                   )),
             ),
-             const Divider(
+            const Divider(
               color: Colors.black26,
               thickness: 2,
               height: 20,
               indent: 80,
               endIndent: 80,
             ),
-           Text(
+            Text(
               'Book Type : ${widget.product.type}',
               textAlign: TextAlign.center,
               style: GoogleFonts.ubuntu(
@@ -468,8 +430,91 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 fontSize: 16,
               ),
             ),
-     SizedBox(
+            
+            const Divider(
+              color: Colors.black26,
+              thickness: 2,
               height: 20,
+              indent: 80,
+              endIndent: 80,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "University : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                widget.product.univercity,
+                style: GoogleFonts.lato(
+                   fontWeight: FontWeight.w600,
+                fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          const Divider(
+              color: Colors.black26,
+              thickness: 2,
+              height: 20,
+              indent: 80,
+              endIndent: 80,
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Branch : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                widget.product.branch,
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+         const Divider(
+              color: Colors.black26,
+              thickness: 2,
+              height: 20,
+              indent: 80,
+              endIndent: 80,
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Semester : ",
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              Text(
+                widget.product.sem,
+                style: GoogleFonts.lato(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          const Divider(
+              color: Colors.black26,
+              thickness: 2,
+              height: 20,
+              indent: 80,
+              endIndent: 80,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -481,14 +526,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         color: Colors.yellow),
                     height: 45,
                     width: 170,
-                    child:  Center(child: Text("Add to Cart",style: GoogleFonts.ubuntu(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),)),
+                    child: Center(
+                        child: Text(
+                      "Add to Cart",
+                      style: GoogleFonts.ubuntu(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    )),
                   ),
-                  onTap: () async{
+                  onTap: () async {
                     await addToCart(context, widget.product);
-                    Navigator.of(context).push(MaterialPageRoute(builder:(context)=> CartScreen()),);
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => CartBuyScreen()),
+                    );
                   },
                 )
               ],
