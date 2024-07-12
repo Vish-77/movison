@@ -55,7 +55,7 @@ class AuthProvider extends ChangeNotifier {
   }
 
   // signin
-  void signInWithPhone(BuildContext context, String phoneNumber) async {
+  Future<void> signInWithPhone(BuildContext context, String phoneNumber) async {
     try {
       await _firebaseAuth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
@@ -127,39 +127,59 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void saveUserDataToFirebase({
-    required BuildContext context,
-    required UserModel userModel,
-    required File profilePic,
-    required Function onSuccess,
-  }) async {
-    _isLoading = true;
-    notifyListeners();
-    try {
-      // uploading image to firebase storage.
-      await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
-        userModel.profilePic = value;
-        userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
-        userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-        userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
-      });
-      _userModel = userModel;
+  required BuildContext context,
+  required UserModel userModel,
+  required File profilePic,
+  required Function onSuccess,
+  required File aadharPic,
+  required File panPic,
+  required File collegeIdPic
+}) async {
+  _isLoading = true;
+  notifyListeners();
+  try {
+    // Uploading profilePic to Firebase Storage
+    await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
+      userModel.profilePic = value;
+      userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
+      userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
+      userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+    });
 
-      // uploading to database
-      await _firebaseFirestore
-          .collection("users")
-          .doc(_uid)
-          .set(userModel.toMap())
-          .then((value) {
-        onSuccess();
-        _isLoading = false;
-        notifyListeners();
-      });
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
+    // Uploading aadharPic to Firebase Storage
+    await storeFileToStorage("aadharPic/$_uid", aadharPic).then((value) {
+      userModel.aadharPic = value;
+    });
+
+    // Uploading panPic to Firebase Storage
+    await storeFileToStorage("panPic/$_uid", panPic).then((value) {
+      userModel.panPic = value;
+    });
+
+    // Uploading collegeIdPic to Firebase Storage
+    await storeFileToStorage("collegeIdPic/$_uid", collegeIdPic).then((value) {
+      userModel.collegeIdPic = value;
+    });
+
+    _userModel = userModel;
+
+    // Uploading user data to Firestore
+    await _firebaseFirestore
+        .collection("users")
+        .doc(_uid)
+        .set(userModel.toMap())
+        .then((value) {
+      onSuccess();
       _isLoading = false;
       notifyListeners();
-    }
+    });
+  } on FirebaseAuthException catch (e) {
+    showSnackBar(context, e.message.toString());
+    _isLoading = false;
+    notifyListeners();
   }
+}
+
 
   Future<String> storeFileToStorage(String ref, File file) async {
     UploadTask uploadTask = _firebaseStorage.ref().child(ref).putFile(file);
@@ -181,6 +201,9 @@ class AuthProvider extends ChangeNotifier {
         bio: snapshot['bio'],
         uid: snapshot['uid'],
         profilePic: snapshot['profilePic'],
+        aadharPic: snapshot['aadharPic'],
+        panPic: snapshot['panPic'],
+        collegeIdPic: snapshot['collegeIdPic'],
         phoneNumber: snapshot['phoneNumber'],
         univercity: snapshot['univercity'] ,
       branch: snapshot['branch'],

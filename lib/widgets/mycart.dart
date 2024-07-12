@@ -8,11 +8,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movison/screens/Home/ProductModel.dart';
 import 'package:movison/widgets/razorpay_payment.dart';
 
+
 class CartScreen extends StatelessWidget {
+  
+
+  CartScreen({super.key});
+  
+
+  
   @override
   Widget build(BuildContext context) {
     // Get the current user ID
     String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    List<String> Buyproduct=[];
+  double amount=0;
 
     if (currentUserId == null) {
       // Handle the case where the user is not signed in
@@ -38,6 +47,28 @@ class CartScreen extends StatelessWidget {
                     ),
                   )
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: GestureDetector(onTap: (){
+          if(amount>0){
+            Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RazorpayPayment(
+                          amount: amount,
+                          bookName : Buyproduct
+                        ),
+                      ),
+                    );
+          }
+        },child: Container(
+          height: 40,
+          width: 100,
+          alignment: Alignment.center,
+          decoration: BoxDecoration( 
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: const Color.fromARGB(255, 192, 30, 233)
+          ),
+          child: const Text("Buy All",style: const TextStyle(fontSize: 20, color: Colors.white),)),),
         body: Stack(children: [
           
           
@@ -64,17 +95,22 @@ class CartScreen extends StatelessWidget {
                 List<QueryDocumentSnapshot> cartDocs = snapshot.data!.docs;
 
                 if (cartDocs.isEmpty) {
+                  amount=0;
+                Buyproduct.clear();
                   return const Center(
                     child: Text('Your cart is empty.'),
                   );
                 }
-
+                amount=0;
+                Buyproduct.clear();
                 return ListView.builder(
                   itemCount: cartDocs.length,
                   itemBuilder: (context, index) {
                     // Get data from each document in the cart collection
                     Map<String, dynamic> data =
                         cartDocs[index].data() as Map<String, dynamic>;
+                        Buyproduct.add(data['name']);
+                        amount += data['price'] as double;
 
                     return Dismissible(
                       key: UniqueKey(),
@@ -142,7 +178,7 @@ class CartScreen extends StatelessWidget {
                                 backgroundImage:
                                     NetworkImage(data['imageUrl'])),
                             title: Text(data['name']),
-                            subtitle: Text('\u{20B9}${data['price']}'),
+                            subtitle: Text('\u{20B9} ${data['price']}'),
                             trailing: IconButton(
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
@@ -152,7 +188,7 @@ class CartScreen extends StatelessWidget {
 
                                 // Remove the item from the cart when the remove icon is pressed
                                 await FirebaseFirestore.instance
-                                    .collection('cart')
+                                    .collection('cart_Rent')
                                     .doc(cartDocs[index].id)
                                     .delete();
 
@@ -166,13 +202,13 @@ class CartScreen extends StatelessWidget {
                                       onPressed: () async {
                                         // Undo action: Re-add the product to the cart
                                         await FirebaseFirestore.instance
-                                            .collection('cart')
+                                            .collection('cart_Rent')
                                             .add(
                                               removedProduct.data() as Map<
                                                   String,
                                                   dynamic>, // Cast to Map<String, dynamic>
                                             );
-
+                                        
                                         // You may want to handle any additional logic related to undoing the action
                                       },
                                     ),
@@ -469,13 +505,16 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
                       MaterialPageRoute(
                         builder: (context) => RazorpayPayment(
                           amount: widget.product.price,
-                          bookName : widget.product.name
+                          bookName : [widget.product.name]
                         ),
                       ),
                     );
                   },
                 )
               ],
+            ),
+            const SizedBox( 
+              height: 20,
             )
      
           ],

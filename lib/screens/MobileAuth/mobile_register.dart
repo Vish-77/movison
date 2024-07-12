@@ -15,6 +15,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController phoneController = TextEditingController();
+   bool isLoading = false;
 
   Country selectedCountry = Country(
     phoneCode: "91",
@@ -162,6 +163,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () => sendPhoneNumber(),
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  if (isLoading)
+                    const CircularProgressIndicator(),
                 ],
               ),
             ),
@@ -171,9 +175,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void sendPhoneNumber() {
+   void sendPhoneNumber() async {
+    setState(() {
+      isLoading = true;
+    });
+
     final ap = Provider.of<AuthProvider>(context, listen: false);
     String phoneNumber = phoneController.text.trim();
-    ap.signInWithPhone(context, "+${selectedCountry.phoneCode}$phoneNumber");
+
+    try {
+      await ap.signInWithPhone(context, "+${selectedCountry.phoneCode}$phoneNumber");
+      // Navigate to OTP page or other success actions here
+    } catch (e) {
+      // Handle error
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }

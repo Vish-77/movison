@@ -11,6 +11,10 @@ class UserModel {
   String univercity;
   String branch;
   String sem;
+  String aadharPic;
+  String panPic;
+  String collegeIdPic;
+
   UserModel({
     required this.name,
     required this.email,
@@ -21,7 +25,10 @@ class UserModel {
     required this.uid,
     required this.univercity,
     required this.branch,
-    required this.sem
+    required this.sem,
+    required this.aadharPic,
+    required this.panPic,
+    required this.collegeIdPic
   });
 
   // from map
@@ -36,7 +43,10 @@ class UserModel {
       profilePic: map['profilePic'] ?? '',
       univercity: map['univercity'] ?? '',
       branch: map['branch']?? '',
-      sem: map['sem']?? ''
+      sem: map['sem']?? '',
+      aadharPic: map['aadharPic'] ?? '',
+      panPic: map['panPic'] ?? '',
+      collegeIdPic: map['collegeIdPic'] ?? '',
     );
   }
   final FirebaseAuth _auth = FirebaseAuth.instance;

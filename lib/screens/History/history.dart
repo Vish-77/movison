@@ -10,7 +10,8 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment History'),
+        title: Text('History'),
+        centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -64,7 +65,7 @@ class HistoryScreen extends StatelessWidget {
                   ],
                 ),
                 child: ListTile(
-                  title: Text(payment['bookName']),
+                  title: Text("${payment['bookName']}"),
                   subtitle: Text(
                     'Date: ${payment['date']}\nTime: ${payment['time']}',
                   ),

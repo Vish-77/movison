@@ -220,7 +220,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(width: 50,),
+              const SizedBox(width: 10,),
               Container(height: 40,
               width: 100,
                 decoration: BoxDecoration( 
@@ -235,7 +235,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       _univercityValue = newValue!;
                     });
                   },
-                  items: <String>['SPPU', 'Mumbai', 'BATU', 'Other']
+                  items: <String>['SPPU',]
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -262,7 +262,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(width: 75,),
+              const SizedBox(width: 36,),
               Container(height: 40,
               width: 100,
                 decoration: BoxDecoration( 
@@ -304,7 +304,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(width: 57,),
+              const SizedBox(width: 17,),
               Container(
                 height: 40,
               width: 100,

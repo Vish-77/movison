@@ -67,7 +67,7 @@ class _PersonalInfo extends State<PersonalInfo> {
 
   Widget _buildSection1() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.only(left: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: Color.fromARGB(255, 232, 222, 242),
@@ -122,11 +122,17 @@ class _PersonalInfo extends State<PersonalInfo> {
                       fontSize: 18,
                     ),
                   ),
-                  Text(
-                    u!.email,
-                    style: GoogleFonts.lato(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
+                  SizedBox(
+                    height:60,
+                    width:200,
+                    child: Text(
+                      u!.email,
+                      textAlign: TextAlign.justify,
+                      style: GoogleFonts.lato(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.blue,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ],

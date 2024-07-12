@@ -8,9 +8,12 @@ import 'package:movison/screens/Home/ProductModel.dart';
 import 'package:movison/widgets/razorpay_payment.dart';
 
 class CartBuyScreen extends StatelessWidget {
+   
   @override
   Widget build(BuildContext context) {
     // Get the current user ID
+    List<String> Buyproduct=[];
+  double amount=0;
     String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
 
     if (currentUserId == null) {
@@ -37,6 +40,28 @@ class CartBuyScreen extends StatelessWidget {
                     ),
                   )
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: GestureDetector(onTap: (){
+         if(amount>0){
+            Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RazorpayPayment(
+                          amount: amount,
+                          bookName : Buyproduct
+                        ),
+                      ),
+                    );
+          }
+        },child: Container(
+          height: 40,
+          width: 100,
+          alignment: Alignment.center,
+          decoration: BoxDecoration( 
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: const Color.fromARGB(255, 192, 30, 233)
+          ),
+          child: const Text("Buy All",style: const TextStyle(fontSize: 20, color: Colors.white),)),),
         body: Stack(children: [
           
           
@@ -63,17 +88,22 @@ class CartBuyScreen extends StatelessWidget {
                 List<QueryDocumentSnapshot> cartDocs = snapshot.data!.docs;
 
                 if (cartDocs.isEmpty) {
+                  amount=0;
+                Buyproduct.clear();
                   return const Center(
                     child: Text('Your cart is empty.'),
                   );
                 }
-
+                amount=0;
+                Buyproduct.clear();
                 return ListView.builder(
                   itemCount: cartDocs.length,
                   itemBuilder: (context, index) {
                     // Get data from each document in the cart collection
                     Map<String, dynamic> data =
                         cartDocs[index].data() as Map<String, dynamic>;
+Buyproduct.add(data['name']);
+                        amount += data['price'] as double;
 
                     return Dismissible(
                       key: UniqueKey(),
@@ -124,6 +154,8 @@ class CartBuyScreen extends StatelessWidget {
                                 ),
                               );
                             } else {
+                              amount=0;
+                Buyproduct.clear();
                               print('Product not found');
                               // Handle the case where the product document does not exist
                             }
@@ -146,6 +178,8 @@ class CartBuyScreen extends StatelessWidget {
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
                                 // Save a reference to the document before deleting it
+                                amount=0;
+                Buyproduct.clear();
                                 DocumentSnapshot removedProduct =
                                     cartDocs[index];
 
@@ -316,7 +350,7 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
               ),
             ),
             Text(
-              'u{20B9} ${widget.product.price.toStringAsFixed(2)}',
+              '\u{20B9} ${widget.product.price.toStringAsFixed(2)}',
               style: GoogleFonts.ubuntu(
                 fontWeight: FontWeight.w400,
                 fontSize: 15,
@@ -466,15 +500,17 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
                       MaterialPageRoute(
                         builder: (context) => RazorpayPayment(
                           amount: widget.product.price,
-                          bookName : widget.product.name
+                          bookName : [widget.product.name]
                         ),
                       ),
                     );
                   },
                 )
               ],
+            ),
+      const SizedBox( 
+              height: 20,
             )
-     
           ],
         ),
       ),

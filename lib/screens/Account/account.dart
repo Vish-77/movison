@@ -79,10 +79,10 @@ class _AccountPageState extends State<AccountPage> {
       child: Column(
         children: [
           _buildProfile(),
-          const SizedBox(
-            height: 20,
-          ),
-          _buildRecord(),
+          // const SizedBox(
+          //   height: 20,
+          // ),
+          // _buildRecord(),
           const SizedBox(
             height: 20,
           ),

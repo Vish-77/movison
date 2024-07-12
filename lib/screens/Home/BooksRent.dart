@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:movison/screens/Home/BooksBuy.dart';
 import 'package:movison/screens/Home/ProductModel.dart';
 import 'package:movison/widgets/mycart.dart';
 
@@ -20,6 +21,11 @@ class _ProductListState extends State {
 
   String searchQuery = '';
   List<Product> filteredProducts = [];
+  String selectedCategory = '';
+  String selectedBrand = '';
+  String selectedsem='';
+  double minPrice = 0.0;
+  double maxPrice = 1000.0;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +40,47 @@ class _ProductListState extends State {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back),),
+          actions: [ 
+             GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return FilterBottomSheet(
+                      onApplyFilters: (category, brand,sem, min, max) {
+                        setState(() {
+                          selectedCategory = category;
+                          selectedBrand = brand;
+                          selectedsem=sem;
+                          minPrice = min;
+                          maxPrice = max;
+                        });
+                      },
+                    );
+                  },
+                );
+              },
+              child: Container(
+                height: 20,
+                width: 60,
+                alignment: Alignment.center,
+                decoration: BoxDecoration( 
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  border: Border.all(width: 1)
+                ),
+                child: Text("Filters",style: GoogleFonts.inter( 
+color: Color.fromARGB(255, 248, 173, 34)
+                ),),),
+            ),
+            const SizedBox( 
+              width: 30,
+            )
+          ],
         ),
-        floatingActionButton: FloatingActionButton(onPressed: (){
+        // floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.yellow,
+          onPressed: (){
            Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => CartScreen()),
                     );
@@ -58,6 +103,7 @@ class _ProductListState extends State {
                 decoration: const InputDecoration(
                   hintText: "Search....",
                   prefixIcon: Icon(Icons.search),
+                  
                   border: InputBorder.none,
                 ),
               ),
@@ -98,9 +144,9 @@ class _ProductListState extends State {
                     return GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // Number of columns
-                        //childAspectRatio: 3 / 2, // Aspect ratio of the items
-                        crossAxisSpacing: 10, // Spacing between columns
-                        mainAxisSpacing: 10, // Spacing between rows
+                        childAspectRatio: 0.8, // Aspect ratio of the items
+                        //crossAxisSpacing: 2, // Spacing between columns
+                        mainAxisSpacing: 5, // Spacing between rows
                       ),
                       itemCount: filteredProducts.length,
                       itemBuilder: (context, index) {
@@ -181,7 +227,8 @@ class ProductCard extends StatelessWidget {
       ), // Wrap the function call
       child: Padding(
         padding: const EdgeInsets.only(
-            //right: 15.0,
+            right: 10.0,
+            top: 10,
             left: 10),
         child: SizedBox(
           width: 180,
@@ -195,7 +242,7 @@ class ProductCard extends StatelessWidget {
               side: const BorderSide(color: Colors.grey, width: 2),
             ),
             elevation: 4,
-            margin: const EdgeInsets.all(10),
+            //margin: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Container(
@@ -214,19 +261,22 @@ class ProductCard extends StatelessWidget {
                     // border: Border.all(width: 2)
                   ),
                 ),
-                SizedBox(
-                    height: 20,
-                    width: 100,
-                    child: Center(
-                      child: Text(
-                        product.name,
-                        textAlign: TextAlign.justify,
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                      height: 40,
+                      width: 200,
+                      child: Center(
+                        child: Text(
+                          product.name,
+                          textAlign: TextAlign.justify,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                    )),
+                      )),
+                ),
                 SizedBox(
                     height: 20,
                     width: 100,
@@ -542,6 +592,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   },
                 )
               ],
+            ),
+             const SizedBox( 
+              height: 20,
             )
           ],
         ),

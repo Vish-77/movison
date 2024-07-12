@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class RazorpayPayment extends StatefulWidget {
   final double amount;
-  final String bookName;
+  final List<String> bookName;
 
   const RazorpayPayment({Key? key, required this.amount, required this.bookName})
       : super(key: key);
@@ -123,9 +123,8 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
         title: const Text('Razorpay Payment'),
         actions: [
           IconButton(
-            icon: Icon(Icons.history),
+            icon: const Icon(Icons.history),
             onPressed: () async {
-              List<Map<String, dynamic>> paymentHistory = await getPaymentHistory();
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -136,114 +135,121 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
           ),
         ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButton: GestureDetector(
+        onTap: openCheckout,
+        child: Container( 
+          width: 200,
+          height: 40,
+          alignment: Alignment.center,
+          decoration: BoxDecoration( 
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            color: Color.fromARGB(255, 185, 27, 233)
+          ),
+          child: Text(
+                      "Pay ₹${widget.amount}",
+                      style: const TextStyle(fontSize: 20, color: Colors.white),
+                    ),
+        )
+      ),
       body: Padding(
-        padding: EdgeInsets.symmetric(vertical: 60, horizontal: 30),
-        child: Column(
-          children: [
-            Container(
-              height: 250,
-              width: 400,
-              decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 232, 222, 242),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(255, 143, 143, 143),
-                        offset: Offset(0, 7),
-                        blurRadius: 5)
-                  ]),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(width: 30),
-                      Text(
-                        'Book Name : ',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "${widget.bookName}",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(width: 30),
-                      Text(
-                        'Date : ',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        DateFormat('dd-MM-yyyy').format(_currentDateTime),
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(width: 30),
-                      Text(
-                        'Time :',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        DateFormat('kk:mm').format(_currentDateTime),
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(width: 30),
-                      Text(
-                        'Total amount :',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        "₹${widget.amount}",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 260,
-            ),
-            SizedBox(
-              width: 300,
-              child: ElevatedButton(
-                onPressed: openCheckout,
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Color.fromARGB(255, 130, 98, 206))),
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Text(
-                    "Pay ₹${widget.amount}",
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
+        padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 10),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                //height: 250,
+                width: 400,
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 232, 222, 242),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Color.fromARGB(255, 143, 143, 143),
+                          offset: Offset(0, 7),
+                          blurRadius: 5)
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Row(
+                      children: [
+                        const SizedBox(width: 30),
+                        const Text(
+                          'Book Name : ',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                         // height:60,
+                          width: 150,
+                          child: Text(
+                            "${widget.bookName}",
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const SizedBox(width: 30),
+                        const Text(
+                          'Date : ',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          DateFormat('dd-MM-yyyy').format(_currentDateTime),
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const SizedBox(width: 30),
+                        const Text(
+                          'Time :',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          DateFormat('kk:mm').format(_currentDateTime),
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        const SizedBox(width: 30),
+                        const Text(
+                          'Total amount :',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          "₹${widget.amount}",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        )
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              
+              
+            ],
+          ),
         ),
       ),
     );

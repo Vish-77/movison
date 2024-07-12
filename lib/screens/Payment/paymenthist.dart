@@ -63,7 +63,7 @@ class PaymentHistoryScreen extends StatelessWidget {
                   ],
                 ),
                 child: ListTile(
-                  title: Text(payment['bookName']),
+                  title: Text("${payment['bookName']}"),
                   subtitle: Text(
                     'Date: ${payment['date']}\nTime: ${payment['time']}',
                   ),

@@ -10,65 +10,32 @@ class CommingList extends StatefulWidget {
 class _CommingListState extends State{
   @override
   Widget build(BuildContext context) {
-    return GridView(
-      padding:const EdgeInsets.symmetric(horizontal: 10),
+    return GridView.builder(
+
+      padding:const EdgeInsets.symmetric(horizontal: 20),
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // Number of columns
-                        childAspectRatio: 3/2,
-                        crossAxisSpacing: 5, // Spacing between columns
-                        mainAxisSpacing: 8, // Spacing between rows
+                        childAspectRatio: 1.5,
+                        crossAxisSpacing: 10, // Spacing between columns
+                        mainAxisSpacing: 10, // Spacing between rows
                       ),
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left:8.0,right: 8),
-                          child: Container( 
-                            height: 80,
-                            width: 80,
-                            decoration: BoxDecoration( 
-                              borderRadius:
-                                            BorderRadius.circular(16),
-                                            border: Border.all(color: Colors.grey,width: 2)
-                            ),
+                      itemCount: 4,
+                      itemBuilder: (context,index){
+                        return 
+                        Container( 
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration( 
+                            borderRadius:
+                                          BorderRadius.circular(16),
+                                          border: Border.all(color: Colors.grey,width: 2)
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left:8.0,right: 8),
-                          child: Container( 
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration( 
-                              borderRadius:
-                                            BorderRadius.circular(16),
-                                            border: Border.all(color: Colors.grey,width: 2)
-                            ),
+                          child: ClipRRect( 
+                            borderRadius: BorderRadius.all(Radius.circular(16)),
+                            child: Image.asset("assets/images/26690.jpg"),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left:8.0,right: 8),
-                          child: Container( 
-                            height:50,
-                            width: 50,
-                            decoration: BoxDecoration( 
-                              borderRadius:
-                                            BorderRadius.circular(16),
-                                            border: Border.all(color: Colors.grey,width: 2)
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left:8.0,right: 8),
-                          child: Container( 
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration( 
-                              borderRadius:
-                                            BorderRadius.circular(16),
-                                            border: Border.all(color: Colors.grey,width: 2)
-                            ),
-                          ),
-                        ),
-                        
-                      ],
+                        );
+                      }
                         
                     
                     );

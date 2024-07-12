@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:movison/screens/Home/Availablebooks.dart';
@@ -296,6 +297,7 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
+  final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -333,7 +335,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ],
           ),
         ),
-        IconButton(
+         (currentUserId! == "2dSnH9aE07fzdySPOsbcMeuUZk33") ? IconButton(
             onPressed: () {
               Navigator.push(
                   context,
@@ -342,7 +344,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         const ProductEntryScreen(),
                   ));
             },
-            icon: Icon(Icons.add_card)),
+            icon: Icon(Icons.add_card)):SizedBox(),
         ChatWithUs(),
       ],
     );

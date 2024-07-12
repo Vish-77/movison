@@ -10,7 +10,138 @@ class BuyList extends StatefulWidget {
   @override
   State createState() => _ProductListState();
 }
+class FilterBottomSheet extends StatefulWidget {
+  final Function(String, String,String, double, double) onApplyFilters;
 
+  FilterBottomSheet({required this.onApplyFilters});
+
+  @override
+  _FilterBottomSheetState createState() => _FilterBottomSheetState();
+}
+
+class _FilterBottomSheetState extends State<FilterBottomSheet> {
+  String selectedCategory = 'SPPU';
+  String selectedBrand = 'CS';
+  String selectedsem = 'I';
+  double minPrice = 0.0;
+  double maxPrice = 5000.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 20,right: 20,top: 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ListTile(title: Center(child: Text('Filters'))),
+          ListTile(
+            title: Text('University'),
+            trailing: SizedBox(
+              width: 150, // Set a fixed width for the trailing widget
+              child: DropdownButton<String>(
+                value: selectedCategory,
+                items: ['SPPU', 'Mumbai', 'BATU', 'Other'].map((category) {
+                  return DropdownMenuItem(
+                    value: category,
+                    child: Text(category),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedCategory = value!;
+                  });
+                },
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text('Branch'),
+            trailing: SizedBox(
+              width: 150, // Set a fixed width for the trailing widget
+              child: DropdownButton<String>(
+                value: selectedBrand,
+                items: ['CS', 'IT', 'ENTC', 'Mec', 'Civil'].map((brand) {
+                  return DropdownMenuItem(
+                    value: brand,
+                    child: Text(brand),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedBrand = value!;
+                  });
+                },
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text('Semester'),
+            trailing: SizedBox(
+              width: 150, // Set a fixed width for the trailing widget
+              child: DropdownButton<String>(
+                value: selectedsem,
+                items: ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'].map((sem) {
+                  return DropdownMenuItem(
+                    value: sem,
+                    child: Text(sem),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedsem = value!;
+                  });
+                },
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text('Min Price'),
+            trailing: SizedBox(
+              width: 200, // Set a fixed width for the trailing widget
+              child: Slider(
+                value: minPrice,
+                min: 0,
+                max: 5000,
+                divisions: 100,
+                label: minPrice.round().toString(),
+                onChanged: (value) {
+                  setState(() {
+                    minPrice = value;
+                  });
+                },
+              ),
+            ),
+          ),
+          ListTile(
+            title: Text('Max Price'),
+            trailing: SizedBox(
+              width: 200, // Set a fixed width for the trailing widget
+              child: Slider(
+                value: maxPrice,
+                min: 0,
+                max: 5000,
+                divisions: 100,
+                label: maxPrice.round().toString(),
+                onChanged: (value) {
+                  setState(() {
+                    maxPrice = value;
+                  });
+                },
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              widget.onApplyFilters(selectedCategory, selectedBrand, selectedsem, minPrice, maxPrice);
+              Navigator.pop(context);
+            },
+            child: Text('Apply Filters'),
+          ),
+        ],
+      ),
+    );
+  }
+}
 class _ProductListState extends State {
   final CollectionReference productsCollection =
       FirebaseFirestore.instance.collection('products');
@@ -18,6 +149,12 @@ class _ProductListState extends State {
 
   String searchQuery = '';
   List<Product> filteredProducts = [];
+  String selectedCategory = '';
+  String selectedBrand = '';
+  String selectedsem='';
+  double minPrice = 0.0;
+  double maxPrice = 1000.0;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +169,47 @@ class _ProductListState extends State {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back),),
+            actions: [ 
+              GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return FilterBottomSheet(
+                      onApplyFilters: (category, brand,sem, min, max) {
+                        setState(() {
+                          selectedCategory = category;
+                          selectedBrand = brand;
+                          selectedsem=sem;
+                          minPrice = min;
+                          maxPrice = max;
+                        });
+                      },
+                    );
+                  },
+                );
+              },
+              child: Container(
+                height: 20,
+                width: 60,
+                alignment: Alignment.center,
+                decoration: BoxDecoration( 
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  border: Border.all(width: 1)
+                ),
+                child: Text("Filters",style: GoogleFonts.inter( 
+color: Color.fromARGB(255, 248, 173, 34)
+                ),),),
+            ),
+            const SizedBox( 
+              width: 30,
+            )
+            ],
         ),
-        floatingActionButton: FloatingActionButton(onPressed: (){
+        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.yellow,
+          onPressed: (){
              Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => CartBuyScreen()),
                     );
@@ -53,9 +229,27 @@ class _ProductListState extends State {
                     searchQuery = value;
                   });
                 },
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   hintText: "Search....",
-                  prefixIcon: Icon(Icons.search),
+                  prefixIcon:const Icon(Icons.search),
+                  suffix:  IconButton(onPressed: (){
+                    showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return FilterBottomSheet(
+                      onApplyFilters: (category, brand,sem, min, max) {
+                        setState(() {
+                          selectedCategory = category;
+                          selectedBrand = brand;
+                          selectedsem=sem;
+                          minPrice = min;
+                          maxPrice = max;
+                        });
+                      },
+                    );
+                  },
+                                  );
+                  }, icon: Icon(Icons.sort)),
                   border: InputBorder.none,
                 ),
               ),
@@ -89,16 +283,20 @@ class _ProductListState extends State {
       product.type.toLowerCase().contains(searchQuery.toLowerCase())  ||
       product.univercity.toLowerCase().contains(searchQuery.toLowerCase())||
       product.branch.toLowerCase().contains(searchQuery.toLowerCase()) ||
-      product.sem.toLowerCase().contains(searchQuery.toLowerCase())))
+        product.sem.toLowerCase().contains(searchQuery.toLowerCase())) &&
+                          (selectedCategory.isEmpty || product.univercity == selectedCategory) &&
+                          (selectedBrand.isEmpty || product.branch == selectedBrand) &&
+                          (selectedsem.isEmpty || product.sem == selectedsem) &&
+                          (product.price >= minPrice && product.price <= maxPrice))
   .toList();
 
                   if (filteredProducts.isNotEmpty) {
                     return GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2, // Number of columns
-                        //childAspectRatio: 3 / 2, // Aspect ratio of the items
-                        crossAxisSpacing: 10, // Spacing between columns
-                        mainAxisSpacing: 10, // Spacing between rows
+                        childAspectRatio: 0.8, // Aspect ratio of the items
+                        //crossAxisSpacing: 10, // Spacing between columns
+                        mainAxisSpacing: 5, // Spacing between rows
                       ),
                       itemCount: filteredProducts.length,
                       itemBuilder: (context, index) {
@@ -177,11 +375,12 @@ class ProductCard extends StatelessWidget {
       ), // Wrap the function call
       child: Padding(
         padding: const EdgeInsets.only(
-            //right: 15.0,
+            right: 10.0,
+            top: 10,
             left: 10),
         child: SizedBox(
           width: 180,
-          height: 188, // Provide a fixed width here
+          height: 200, // Provide a fixed width here
           child: Card(
             shape: RoundedRectangleBorder(
               borderRadius:
@@ -191,7 +390,7 @@ class ProductCard extends StatelessWidget {
               side: const BorderSide(color: Colors.grey, width: 2),
             ),
             elevation: 4,
-            margin: const EdgeInsets.all(10),
+           // margin: const EdgeInsets.all(10),
             child: Column(
               children: [
                 Container(
@@ -210,19 +409,22 @@ class ProductCard extends StatelessWidget {
                     // border: Border.all(width: 2)
                   ),
                 ),
-                SizedBox(
-                    height: 20,
-                    width: 100,
-                    child: Center(
-                      child: Text(
-                        product.name,
-                        textAlign: TextAlign.justify,
-                        style: GoogleFonts.poppins(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: SizedBox(
+                      height: 40,
+                      width: 250,
+                      child: Center(
+                        child: Text(
+                          product.name,
+                          textAlign: TextAlign.justify,
+                          style: GoogleFonts.poppins(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                          ),
                         ),
-                      ),
-                    )),
+                      )),
+                ),
                 SizedBox(
                     height: 20,
                     width: 100,
@@ -238,7 +440,7 @@ class ProductCard extends StatelessWidget {
                     )),
                 Center(
                     child: Text(
-                  '\u{20B9}${product.price}/kg',
+                  '\u{20B9}${product.price}',
                   style: GoogleFonts.poppins(
                     fontWeight: FontWeight.w400,
                     fontSize: 12,
@@ -374,15 +576,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
             ),
-            Text(
-              widget.product.name,
-              style: GoogleFonts.ubuntu(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
+            SizedBox(
+              height: 40,
+              width: 400,
+              child: Center(
+                child: Text(
+                  widget.product.name,
+                  style: GoogleFonts.ubuntu(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ),
             Text(
-              'Rs ${widget.product.price.toStringAsFixed(2)}/kg',
+              '\u{20B9} ${widget.product.price.toStringAsFixed(2)}',
               style: GoogleFonts.ubuntu(
                 fontWeight: FontWeight.w400,
                 fontSize: 15,
@@ -543,6 +751,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   },
                 )
               ],
+            ),
+             const SizedBox( 
+              height: 20,
             )
           ],
         ),

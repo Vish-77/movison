@@ -376,7 +376,7 @@ _buildBody(),
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(width: 50,),
+              const SizedBox(width: 30,),
               Container(height: 40,
               width: 100,
                 decoration: BoxDecoration( 
@@ -391,7 +391,7 @@ _buildBody(),
                       _univercityValue = newValue!;
                     });
                   },
-                  items: <String>['SPPU', 'Mumbai', 'BATU', 'Other']
+                  items: <String>['SPPU','Other']
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -418,7 +418,7 @@ _buildBody(),
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(width: 75,),
+              const SizedBox(width: 56,),
               Container(height: 40,
               width: 100,
                 decoration: BoxDecoration( 
@@ -460,7 +460,7 @@ _buildBody(),
                   fontSize: 16,
                 ),
               ),
-              const SizedBox(width: 57,),
+              const SizedBox(width: 37,),
               Container(
                 height: 40,
               width: 100,

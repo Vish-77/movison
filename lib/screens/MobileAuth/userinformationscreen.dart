@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:movison/screens/Home/HomeScreen.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart';
 import 'package:movison/screens/MobileAuth/custom_button_in_mobile_auth.dart';
@@ -18,6 +19,9 @@ class UserInfromationScreen extends StatefulWidget {
 
 class _UserInfromationScreenState extends State<UserInfromationScreen> {
   File? image;
+  File? aadhr;
+  File? pan;
+  File? collegeId;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final bioController = TextEditingController();
@@ -31,6 +35,19 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
   }
 void selectImage() async {
     image = await pickImage(context);
+    setState(() {});
+  }
+
+  void selectAadharImage() async {
+    aadhr = await pickImage(context);
+    setState(() {});
+  }
+  void selectPanImage() async {
+    pan = await pickImage(context);
+    setState(() {});
+  }
+  void selectIdImage() async {
+    collegeId = await pickImage(context);
     setState(() {});
   }
 
@@ -48,32 +65,143 @@ void selectImage() async {
             : SingleChildScrollView(
                 padding:
                     const EdgeInsets.symmetric(vertical: 25.0, horizontal: 5.0),
-                child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        onTap: () => selectImage(),
-                        child: image == null
-                            ? const CircleAvatar(
-                                backgroundColor: Colors.purple,
-                                radius: 50,
-                                child: Icon(
-                                  Icons.account_circle,
-                                  size: 50,
-                                  color: Colors.white,
+                      Text("Upload Profile Photo *",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                      Center(
+                        child: InkWell(
+                          onTap: () => selectImage(),
+                          child: image == null
+                              ? Container( 
+                                height: 100,
+                                width: 250,
+                                decoration: BoxDecoration( 
+                                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                                  border: Border.all(width: .8),
                                 ),
+                                child: Icon(Icons.account_circle,size: 50,),
                               )
-                            : CircleAvatar(
-                                backgroundImage: FileImage(image!),
-                                radius: 50,
-                              ),
+                              : CircleAvatar(
+                                  backgroundImage: FileImage(image!),
+                                  radius: 50,
+                                ),
+                        ),
                       ),
+                      Text("Upload Aadhar Card Photo *",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                       Center(
+                         child: InkWell(
+                          onTap: () => selectAadharImage(),
+                          child: aadhr == null
+                              ? Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: Icon(Icons.file_copy,size: 50,),
+                                )
+                              : Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: Image(
+                          image: FileImage(aadhr!),
+                          fit: BoxFit.fill,)
+                      )
+                                )
+                                               ),
+                       ),
+                       Text("Upload Pan Card",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                       Center(
+                         child: InkWell(
+                          onTap: () => selectPanImage(),
+                          child: pan == null
+                              ? Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: Icon(Icons.file_copy,size: 50,),
+                                )
+                              : Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: Image(
+                          image: FileImage(pan!),
+                          fit: BoxFit.fill,)
+                      )
+                                )
+                                               ),
+                       ),
+                      Text("Upload CollegeId*",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                       Center(
+                         child: InkWell(
+                          onTap: () => selectIdImage(),
+                          child: collegeId == null
+                              ? Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: Icon(Icons.file_copy,size: 50,),
+                                )
+                              :Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: Image(
+                          image: FileImage(collegeId!),
+                          fit: BoxFit.fill,)
+                      )
+                                )
+                                               ),
+                       ),
+                       Text("Enter Student Name *",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
                       Container(
                         width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 15),
+                        
                         margin: const EdgeInsets.only(top: 20),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // name field
                             // textFeld(
@@ -83,13 +211,19 @@ void selectImage() async {
                             //   maxLines: 1,
                             //   controller: nameController,
                             // ),
+                            
                             nameTextField(),
-                            SizedBox(height: 30),
-
+                            SizedBox(height: 10),
+                  
                             // email
+                            Text("Enter Student Email *",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                      SizedBox(height: 10),
                             EmailTextField(),
                             
-
+                  
                           ],
                         ),
                       ),
@@ -171,13 +305,20 @@ void storeData() async {
       uid: "",
       univercity: '',
       branch: '',
-      sem: ''
+      sem: '',
+      aadharPic: '',
+      panPic: '',
+      collegeIdPic: '',
+
     );
-    if (image != null) {
+    if (image != null && aadhr !=null && collegeId != null && nameController.text.isNotEmpty && emailController.text.isNotEmpty) {
       ap.saveUserDataToFirebase(
         context: context,
         userModel: userModel,
         profilePic: image!,
+        aadharPic:aadhr!,
+        panPic:pan!,
+        collegeIdPic:collegeId!,
         onSuccess: () {
           ap.saveUserDataToSP().then(
                 (value) => ap.setSignIn().then(
@@ -192,7 +333,7 @@ void storeData() async {
         },
       );
     } else {
-      showSnackBar(context, "Please upload your profile photo");
+      showSnackBar(context, "Please upload required (*) documents");
     }
   }
 }
