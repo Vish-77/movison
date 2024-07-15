@@ -26,6 +26,12 @@ class _CommingListState extends State{
                           height: 80,
                           width: 80,
                           decoration: BoxDecoration( 
+                            boxShadow: [
+                              BoxShadow(offset: Offset(-3,5), 
+                              blurRadius: 3,
+                              color: Color.fromARGB(255, 158, 158, 158)
+                            )
+                            ],
                             borderRadius:
                                           BorderRadius.circular(16),
                                           border: Border.all(color: Colors.grey,width: 2)
