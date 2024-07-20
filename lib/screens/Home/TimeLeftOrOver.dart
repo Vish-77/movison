@@ -1,11 +1,8 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:movison/screens/Home/HomeScreen.dart';
 
@@ -107,12 +104,6 @@ final startDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final userId = user!.uid;
-    var now = DateTime.now();
-    var Dateformatter = DateFormat('yyyy-MM-dd');
-    var timeFormatter = DateFormat("KK:mm a");
     DateFormat inputFormat = DateFormat('dd-MM-yyyy hh:mm a');
     return StreamBuilder(
         stream: FirebaseFirestore.instance.collection('StudentDetails').snapshots(),

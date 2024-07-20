@@ -2,21 +2,16 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:movison/screens/Home/HomeScreen.dart';
-import 'package:movison/screens/MobileAuth/usermodel.dart';
 import 'package:movison/size_config.dart';
 import 'package:movison/widgets/custom_surfix_icon.dart';
-import 'package:movison/screens/MobileAuth/authprovider.dart' as dauth;
 import 'package:fluttertoast/fluttertoast.dart';  // Import Fluttertoast
 
-import 'package:provider/provider.dart';
 
 class AddStudentdetails extends StatefulWidget {
   @override
@@ -582,7 +577,7 @@ class _AddStudentdetailsState extends State<AddStudentdetails> {
               width: 100,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: isLoading
-                  ? Center(
+                  ? const Center(
                       child: CircularProgressIndicator(),
                     )
                   : Column(

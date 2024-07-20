@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movison/theme/color.dart';
 
 class CategoryBox extends StatelessWidget {
@@ -67,10 +66,10 @@ class CategoryBox extends StatelessWidget {
   void _onTap(BuildContext context) {
     // Navigate to the corresponding category page based on the category name
     switch (data["name"]) {
-      case "Rent":
+      case "Rent Books":
         Navigator.pushNamed(context, '/all_rent');
         break;
-      case "Buy":
+      case "Buy Books":
       //Navigate to the "All" category page
       Navigator.pushNamed(context, '/all_buy');
       break;

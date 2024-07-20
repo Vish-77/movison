@@ -2,11 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movison/screens/Account/account.dart';
-import 'package:movison/screens/Home/AllCategoryPage.dart';
+import 'package:movison/screens/Home/notification.dart';
 import 'package:movison/widgets/constants.dart';
 import 'package:movison/widgets/enums.dart';
-import 'package:movison/widgets/icon_but_with_cnt.dart';
-import 'package:movison/widgets/mycart.dart';
 
 
 class CustomBottomNavBar extends StatelessWidget {
@@ -19,19 +17,19 @@ class CustomBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color inActiveIconColor = Color(0xFFB6B6B6);
+    final Color inActiveIconColor = const Color(0xFFB6B6B6);
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            offset: Offset(0, -15),
+            offset: const Offset(0, -15),
             blurRadius: 20,
-            color: Color(0xFFDADADA).withOpacity(0.15),
+            color: const Color(0xFFDADADA).withOpacity(0.15),
           ),
         ],
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(40),
           topRight: Radius.circular(40),
         ),
@@ -62,6 +60,20 @@ class CustomBottomNavBar extends StatelessWidget {
               //   },
               //
               // ),
+              
+              
+              IconButton(
+                icon: SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: Image.asset(
+                    "assets/icons/notification.png",
+                   
+                  ),
+                ),
+                //onPressed: () {},
+               onPressed: () =>  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> const NotificationScreen()),),
+              ),
              
               IconButton(
                 icon: SvgPicture.asset(
@@ -71,7 +83,7 @@ class CustomBottomNavBar extends StatelessWidget {
                       : kPrimaryColor,
                 ),
                 //onPressed: () {},
-               onPressed: () =>  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> AccountPage()),),
+               onPressed: () =>  Navigator.of(context).push(MaterialPageRoute(builder:(context)=> const AccountPage()),),
               ),
             ],
           )),

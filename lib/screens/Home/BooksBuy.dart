@@ -11,7 +11,7 @@ class BuyList extends StatefulWidget {
   State createState() => _ProductListState();
 }
 class FilterBottomSheet extends StatefulWidget {
-  final Function(String, String,String, double, double) onApplyFilters;
+  final Function(String, String,String) onApplyFilters;
 
   FilterBottomSheet({required this.onApplyFilters});
 
@@ -23,8 +23,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   String selectedCategory = 'SPPU';
   String selectedBrand = 'CS';
   String selectedsem = 'I';
-  double minPrice = 0.0;
-  double maxPrice = 5000.0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +39,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               width: 150, // Set a fixed width for the trailing widget
               child: DropdownButton<String>(
                 value: selectedCategory,
-                items: ['SPPU', 'Mumbai', 'BATU', 'Other'].map((category) {
+                items: ['SPPU',].map((category) {
                   return DropdownMenuItem(
                     value: category,
                     child: Text(category),
@@ -94,45 +93,10 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ),
             ),
           ),
-          ListTile(
-            title: Text('Min Price'),
-            trailing: SizedBox(
-              width: 200, // Set a fixed width for the trailing widget
-              child: Slider(
-                value: minPrice,
-                min: 0,
-                max: 5000,
-                divisions: 100,
-                label: minPrice.round().toString(),
-                onChanged: (value) {
-                  setState(() {
-                    minPrice = value;
-                  });
-                },
-              ),
-            ),
-          ),
-          ListTile(
-            title: Text('Max Price'),
-            trailing: SizedBox(
-              width: 200, // Set a fixed width for the trailing widget
-              child: Slider(
-                value: maxPrice,
-                min: 0,
-                max: 5000,
-                divisions: 100,
-                label: maxPrice.round().toString(),
-                onChanged: (value) {
-                  setState(() {
-                    maxPrice = value;
-                  });
-                },
-              ),
-            ),
-          ),
+         
           ElevatedButton(
             onPressed: () {
-              widget.onApplyFilters(selectedCategory, selectedBrand, selectedsem, minPrice, maxPrice);
+              widget.onApplyFilters(selectedCategory, selectedBrand, selectedsem);
               Navigator.pop(context);
             },
             child: Text('Apply Filters'),
@@ -152,8 +116,7 @@ class _ProductListState extends State {
   String selectedCategory = '';
   String selectedBrand = '';
   String selectedsem='';
-  double minPrice = 0.0;
-  double maxPrice = 1000.0;
+ 
   
 
   @override
@@ -169,42 +132,7 @@ class _ProductListState extends State {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back),),
-            actions: [ 
-              GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return FilterBottomSheet(
-                      onApplyFilters: (category, brand,sem, min, max) {
-                        setState(() {
-                          selectedCategory = category;
-                          selectedBrand = brand;
-                          selectedsem=sem;
-                          minPrice = min;
-                          maxPrice = max;
-                        });
-                      },
-                    );
-                  },
-                );
-              },
-              child: Container(
-                height: 20,
-                width: 60,
-                alignment: Alignment.center,
-                decoration: BoxDecoration( 
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  border: Border.all(width: 1)
-                ),
-                child: Text("Filters",style: GoogleFonts.inter( 
-color: Color.fromARGB(255, 248, 173, 34)
-                ),),),
-            ),
-            const SizedBox( 
-              width: 30,
-            )
-            ],
+           
         ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
@@ -217,8 +145,9 @@ color: Color.fromARGB(255, 248, 173, 34)
         body: Column(
           children: [
             Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
+              margin: const EdgeInsets.symmetric(horizontal: 30),
               height: 40,
+             
               decoration: BoxDecoration(
                   //color: const Color.fromARGB(255, 245, 194, 116),
                   borderRadius: const BorderRadius.all(Radius.circular(30)),
@@ -229,31 +158,50 @@ color: Color.fromARGB(255, 248, 173, 34)
                     searchQuery = value;
                   });
                 },
-                decoration: InputDecoration(
+                decoration:const InputDecoration(
                   hintText: "Search....",
                   prefixIcon:const Icon(Icons.search),
-                  suffix:  IconButton(onPressed: (){
-                    showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return FilterBottomSheet(
-                      onApplyFilters: (category, brand,sem, min, max) {
-                        setState(() {
-                          selectedCategory = category;
-                          selectedBrand = brand;
-                          selectedsem=sem;
-                          minPrice = min;
-                          maxPrice = max;
-                        });
-                      },
-                    );
-                  },
-                                  );
-                  }, icon: Icon(Icons.sort)),
                   border: InputBorder.none,
                 ),
               ),
             ),
+             Container(
+              alignment: Alignment.centerRight,
+              padding:const EdgeInsets.only(right: 30),
+               child:Column(
+                children: [
+                IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return FilterBottomSheet(
+                          onApplyFilters: (category, brand,sem) {
+                            setState(() {
+                              selectedCategory = category;
+                              selectedBrand = brand;
+                              selectedsem=sem;
+                           
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
+                  icon:SizedBox( 
+                    height: 30,
+                    width: 40,
+                    child: Image.asset("assets/icons/filter.png",fit: BoxFit.fill,) ,
+                  ),
+                  tooltip: "Filters",
+                             ),
+                  const Text("Filters")
+                             
+                    
+               ],
+               )
+             ),
+            
             Expanded(
               child: FutureBuilder<QuerySnapshot>(
                 future: productsCollection.get(),
@@ -286,8 +234,7 @@ color: Color.fromARGB(255, 248, 173, 34)
         product.sem.toLowerCase().contains(searchQuery.toLowerCase())) &&
                           (selectedCategory.isEmpty || product.univercity == selectedCategory) &&
                           (selectedBrand.isEmpty || product.branch == selectedBrand) &&
-                          (selectedsem.isEmpty || product.sem == selectedsem) &&
-                          (product.price >= minPrice && product.price <= maxPrice))
+                          (selectedsem.isEmpty || product.sem == selectedsem) )
   .toList();
 
                   if (filteredProducts.isNotEmpty) {
@@ -745,9 +692,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   onTap: () async {
                     await addToCart(context, widget.product);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CartBuyScreen()),
-                    );
+                    
                   },
                 )
               ],

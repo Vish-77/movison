@@ -57,6 +57,7 @@ class AuthProvider extends ChangeNotifier {
   // signin
   Future<void> signInWithPhone(BuildContext context, String phoneNumber) async {
     try {
+      //await _firebaseAuth.setSettings(appVerificationDisabledForTesting: true);
       await _firebaseAuth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
           verificationCompleted:
@@ -131,9 +132,11 @@ class AuthProvider extends ChangeNotifier {
   required UserModel userModel,
   required File profilePic,
   required Function onSuccess,
-  required File aadharPic,
-  required File panPic,
-  required File collegeIdPic
+  required File aadharFront,
+  required File aadharBack,
+  required File? panPic,
+  required File collegeIdPicFront,
+  required File collegeIdPicBack
 }) async {
   _isLoading = true;
   notifyListeners();
@@ -147,18 +150,26 @@ class AuthProvider extends ChangeNotifier {
     });
 
     // Uploading aadharPic to Firebase Storage
-    await storeFileToStorage("aadharPic/$_uid", aadharPic).then((value) {
-      userModel.aadharPic = value;
+    await storeFileToStorage("aadharFront/$_uid", aadharFront).then((value) {
+      userModel.aadharFront = value;
+    });
+    await storeFileToStorage("aadharBack/$_uid", aadharBack).then((value) {
+      userModel.aadharBack = value;
     });
 
     // Uploading panPic to Firebase Storage
-    await storeFileToStorage("panPic/$_uid", panPic).then((value) {
+    if(panPic != null){
+      await storeFileToStorage("panPic/$_uid", panPic).then((value) {
       userModel.panPic = value;
     });
+    }
 
     // Uploading collegeIdPic to Firebase Storage
-    await storeFileToStorage("collegeIdPic/$_uid", collegeIdPic).then((value) {
-      userModel.collegeIdPic = value;
+    await storeFileToStorage("collegeIdPicFront/$_uid", collegeIdPicFront).then((value) {
+      userModel.collegeIdPicFront = value;
+    });
+    await storeFileToStorage("collegeIdPicBack/$_uid", collegeIdPicBack).then((value) {
+      userModel.collegeIdPicBack = value;
     });
 
     _userModel = userModel;
@@ -172,7 +183,9 @@ class AuthProvider extends ChangeNotifier {
       onSuccess();
       _isLoading = false;
       notifyListeners();
+
     });
+    await saveUserDataToSP();
   } on FirebaseAuthException catch (e) {
     showSnackBar(context, e.message.toString());
     _isLoading = false;
@@ -198,14 +211,16 @@ class AuthProvider extends ChangeNotifier {
         name: snapshot['name'],
         email: snapshot['email'],
         createdAt: snapshot['createdAt'],
-        bio: snapshot['bio'],
         uid: snapshot['uid'],
         profilePic: snapshot['profilePic'],
-        aadharPic: snapshot['aadharPic'],
+        aadharFront: snapshot['aadharFront'],
+        aadharBack: snapshot['aadharBack'],
         panPic: snapshot['panPic'],
-        collegeIdPic: snapshot['collegeIdPic'],
+        collegeIdPicFront: snapshot['collegeIdPicFront'],
+        collegeIdPicBack: snapshot['collegeIdPicBack'],
         phoneNumber: snapshot['phoneNumber'],
         univercity: snapshot['univercity'] ,
+        college: snapshot['college'],
       branch: snapshot['branch'],
       sem: snapshot['sem']
       );
@@ -238,7 +253,7 @@ class AuthProvider extends ChangeNotifier {
   // Assuming UserModel.fromMap method is implemented to convert Firestore data to UserModel object
 
   Future<void> updateProfile(
-      BuildContext context, String name, String? email,String bio, File? profilePic, String? univercity,String? branch,String? sem) async {
+      BuildContext context, String name, String? email, File? profilePic,File? aadharBack,File? aadharFront,File? pan,File? collegeIdBack,File? collegeIdFront) async {
     try {
       _isLoading = true;
       notifyListeners();
@@ -263,16 +278,38 @@ class AuthProvider extends ChangeNotifier {
       // Update name and bio in the userModel
       _userModel!.name = name;
       _userModel!.email=email!;
-      _userModel!.bio = bio;
-      _userModel!.univercity=univercity!;
-      _userModel!.branch=branch!;
-      _userModel!.sem=sem!;
+     
 
       // If a new profile picture is provided, upload it to Firebase Storage
       if (profilePic != null) {
         String imageUrl = await storeFileToStorage(
             "profilePic/${currentUser1.uid}", profilePic);
         _userModel!.profilePic = imageUrl;
+      }
+      if (aadharFront != null) {
+        String imageUrl = await storeFileToStorage(
+            "aadharFront/${currentUser1.uid}", aadharFront);
+        _userModel!.aadharFront = imageUrl;
+      }
+      if (aadharBack != null) {
+        String imageUrl = await storeFileToStorage(
+            "aadharBack/${currentUser1.uid}", aadharBack);
+        _userModel!.aadharBack = imageUrl;
+      }
+      if (pan != null) {
+        String imageUrl = await storeFileToStorage(
+            "panPic/${currentUser1.uid}", pan);
+        _userModel!.panPic = imageUrl;
+      }
+      if (collegeIdFront != null) {
+        String imageUrl = await storeFileToStorage(
+            "collegeIdPicFront/${currentUser1.uid}", collegeIdFront);
+        _userModel!.collegeIdPicFront = imageUrl;
+      }
+      if (collegeIdBack != null) {
+        String imageUrl = await storeFileToStorage(
+            "collegeIdPicBack/${currentUser1.uid}", collegeIdBack);
+        _userModel!.collegeIdPicBack = imageUrl;
       }
 
       // Update user data in Firestore
@@ -282,18 +319,8 @@ class AuthProvider extends ChangeNotifier {
           .update(_userModel!.toMap());
 
         log("Update sucessfully");
-        saveUserDataToSP();
+        await saveUserDataToSP();
 
-      // Save the updated user data to Firebase
-      // saveUserDataToFirebase(
-      //   context: context,
-      //   userModel: _userModel!,
-      //   profilePic: profilePic!,
-      //   onSuccess: () {
-      //     _isLoading = false;
-      //     notifyListeners();
-      //   },
-      // );
     } catch (e, stackTrace) {
       print("Error updating profile: $e");
       print(stackTrace);
@@ -303,6 +330,57 @@ class AuthProvider extends ChangeNotifier {
       showSnackBar(context, "Failed to update profile: $e");
     }
   }
+   Future<void> updateCollegeInfo(
+      BuildContext context, String univercity,String branch,String sem,String college) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      // Ensure the user is authenticated
+      User? currentUser1 = FirebaseAuth.instance.currentUser;
+      if (currentUser1 == null) {
+        throw Exception("User not authenticated.");
+      }
+
+      // Ensure the userModel is not null
+      if (_userModel == null) {
+        // If _userModel is null, fetch it from Firestore based on the current user's ID
+        DocumentSnapshot userData = await _firebaseFirestore
+            .collection("users")
+            .doc(currentUser1.uid)
+            .get();
+        _userModel =
+            UserModel.fromMap(userData.data()! as Map<String, dynamic>);
+      }
+
+      // Update name and bio in the userModel
+      _userModel!.univercity=univercity;
+      _userModel!.branch=branch;
+      _userModel!.sem=sem;
+      _userModel!.college=college;
+     
+
+      // If a new profile picture is provided, upload it to Firebase Storage
+      
+      // Update user data in Firestore
+      await _firebaseFirestore
+          .collection("users")
+          .doc(currentUser1.uid)
+          .update(_userModel!.toMap());
+
+        log("Update sucessfully");
+       await saveUserDataToSP();
+
+    } catch (e, stackTrace) {
+      print("Error updating profile: $e");
+      print(stackTrace);
+      _isLoading = false;
+      notifyListeners();
+      // Handle error and show appropriate message to the user
+      showSnackBar(context, "Failed to update profile: $e");
+    }
+  }
+
  Future resendOtp({
     required String phoneNumber,
     required BuildContext context,

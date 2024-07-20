@@ -5,8 +5,8 @@ var profile = {
 };
 
 List categories = [
-  {"name": "Rent", "icon": "assets/icons/categories/rent.png"},
-  {"name": "Buy", "icon": "assets/icons/categories/buybook.png"},
+  {"name": "Rent Books", "icon": "assets/icons/categories/rent.png"},
+  {"name": "Buy Books", "icon": "assets/icons/categories/buybook.png"},
 ];
 List banner = ["assets/icons/banner1.jpg", "assets/icons/banner2.jpg"];
 List courses = [

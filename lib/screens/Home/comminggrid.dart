@@ -7,40 +7,82 @@ class CommingList extends StatefulWidget {
   State createState() => _CommingListState();
 }
 
+
 class _CommingListState extends State{
+  final List<String> name = ["Projects", "Placement", "Invests", "Work with Us"];
+
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
+    // Get screen width and height
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
 
-      padding:const EdgeInsets.symmetric(horizontal: 20),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2, // Number of columns
-                        childAspectRatio: 1.5,
-                        crossAxisSpacing: 10, // Spacing between columns
-                        mainAxisSpacing: 10, // Spacing between rows
-                      ),
-                      itemCount: 4,
-                      itemBuilder: (context,index){
-                        return 
-                        Container( 
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration( 
-                            borderRadius:
-                                          BorderRadius.circular(16),
-                                          border: Border.all(color: Colors.grey,width: 2)
-                          ),
-                          child: ClipRRect( 
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                            child: Image.asset("assets/images/26690.jpg"),
-                          ),
-                        );
-                      }
-                        
-                    
-                    );
+    // Determine the crossAxisCount and childAspectRatio based on screen width
+    int crossAxisCount;
+    double childAspectRatio;
+    double containerHeight;
+    double containerWidth;
+
+    if (screenWidth <600) {
+      // For small screens
+      crossAxisCount = 2;
+      childAspectRatio = 1.2;
+      containerHeight = screenHeight * 0.1;
+      containerWidth = screenWidth * 0.4;
+    } else {
+      // For larger screens
+      crossAxisCount = 4;
+      childAspectRatio = 1.5;
+      containerHeight = screenHeight * 0.15;
+      containerWidth = screenWidth * 0.2;
+    }
+
+    return Scaffold(
+     
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: GridView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount, // Number of columns
+            childAspectRatio: childAspectRatio,
+            crossAxisSpacing: 10, // Spacing between columns
+            mainAxisSpacing: 10, // Spacing between rows
+          ),
+          itemCount: 4,
+          itemBuilder: (context, index) {
+            return Column(
+              children: [
+                Container(
+                  height: containerHeight,
+                  width: containerWidth,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: Colors.grey, width: 2),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                    child: Image.asset(
+                      "assets/images/26690.jpg",
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  name[index],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 }
-
-
-  

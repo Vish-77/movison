@@ -31,7 +31,7 @@ class HistoryScreen extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No payment history found.'));
+            return Center(child: Text('No Book Purchase history found.'));
           }
 
           List<Map<String, dynamic>> paymentHistory = snapshot.data!.docs.map((doc) {

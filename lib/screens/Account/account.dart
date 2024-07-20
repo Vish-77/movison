@@ -27,7 +27,7 @@ class _AccountPageState extends State<AccountPage> {
   UserModel? u;
   bool isUserLoaded = false;
 
-  void getData() async {
+  Future<void> getData() async {
     final ap = Provider.of<MovisonAuthProvider.AuthProvider>(context,
         listen: false); // Use the alias
 
@@ -51,7 +51,13 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account'),
+        centerTitle: true,
+        title: const Text('Profile',style: TextStyle(
+            color: AppColor.textColor,
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+          ),),
+        
       ),
       body: _buildBody(),
     );
@@ -62,7 +68,7 @@ class _AccountPageState extends State<AccountPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "Account",
+          "Profile",
           style: TextStyle(
             color: AppColor.textColor,
             fontSize: 24,
@@ -74,52 +80,55 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Column(
-        children: [
-          _buildProfile(),
-          // const SizedBox(
-          //   height: 20,
-          // ),
-          // _buildRecord(),
-          const SizedBox(
-            height: 20,
-          ),
-          _buildSection1(),
-          const SizedBox(
-            height: 20,
-          ),
-          _buildSection2(),
-          const SizedBox(
-            height: 20,
-          ),
-          _buildSection3(),
-        ],
+    return RefreshIndicator(
+      onRefresh:getData,
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          children: [
+            _buildProfile(),
+            
+            const SizedBox(
+              height: 20,
+            ),
+            _buildSection1(),
+            const SizedBox(
+              height: 20,
+            ),
+            _buildSection2(),
+            const SizedBox(
+              height: 20,
+            ),
+            _buildSection3(),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildProfile() {
-    return Column(
-      children: [
-        const ProfilePic(),
-        const SizedBox(
-          height: 10,
-        ),
-        if (u != null) ...[
-          Text(
-            u!.name,
-            style:const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w500,
-            ),
+    return RefreshIndicator(
+      onRefresh:getData,
+      child: Column(
+        children: [
+          const ProfilePic(),
+          const SizedBox(
+            height: 10,
           ),
-        ] else ...[
-          // Handle the case when u or u.name is null
-          const Text("User name not available"),
+          if (u != null) ...[
+            Text(
+              u!.name,
+              style:const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ] else ...[
+            // Handle the case when u or u.name is null
+            const Text("User name not available"),
+          ],
         ],
-      ],
+      ),
     );
   }
 
@@ -302,35 +311,68 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget _buildSection3() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: AppColor.cardColor,
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.shadowColor.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 1,
-            offset: const Offset(0, 1), // changes position of shadow
+ Widget _buildSection3() {
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 15),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(5),
+      color: AppColor.cardColor,
+      boxShadow: [
+        BoxShadow(
+          color: AppColor.shadowColor.withOpacity(0.1),
+          spreadRadius: 1,
+          blurRadius: 1,
+          offset: const Offset(0, 1), // changes position of shadow
+        ),
+      ],
+    ),
+    child: SettingItem(
+      title: "Log Out",
+      leadingIcon: "assets/icons/logout.svg",
+      bgIconColor: AppColor.darker,
+      onTap: () async {
+        await _showLogoutConfirmationDialog(context);
+      },
+    ),
+  );
+}
+
+Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    barrierDismissible: false, // user must tap a button
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Confirm Logout'),
+        content: SingleChildScrollView(
+          child: ListBody(
+            children: const <Widget>[
+              Text('Are you sure you want to log out?'),
+            ],
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          TextButton(
+            child: const Text('Logout'),
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const RegisterScreen()),
+                (route) => false,
+              );
+            },
           ),
         ],
-      ),
-      child: SettingItem(
-        title: "Log Out",
-        leadingIcon: "assets/icons/logout.svg",
-        bgIconColor: AppColor.darker,
-        onTap: () async => {
-          await FirebaseAuth.instance.signOut(),
-          //await storage.delete(key: "uid"),
-          // Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MobileLogin()), (route) => false)
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const RegisterScreen()),
-              (route) => false)
-        },
-      ),
-    );
-  }
+      );
+    },
+  );
+}
+
 }

@@ -64,11 +64,11 @@ ios: true
 
 
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo2.png"
-  adaptive_icon_background: "#ffffff"
+  image_path: "assets/images/1234.png"
+
 
 flutter:
   uses-material-design: true

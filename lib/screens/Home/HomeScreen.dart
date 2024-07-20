@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:movison/screens/Home/Availablebooks.dart';
 import 'package:movison/screens/Home/addbooks.dart';
 import 'package:movison/screens/Home/comminggrid.dart';
+import 'package:movison/screens/Home/feedBack.dart';
 import 'package:movison/size_config.dart';
 import 'package:movison/theme/color.dart';
 import 'package:movison/utils/data.dart';
@@ -275,7 +276,17 @@ class Body extends StatelessWidget {
             ),
             SizedBox(height: getProportionateScreenWidth(20)),
             CategorySection(),
-            SizedBox(height: getProportionateScreenWidth(20)),
+            SizedBox(height: getProportionateScreenHeight(20),),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.only(left: 40),
+              child: const Text("Comming Soon",style:TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                fontSize: 18
+              ),),
+            ),
+            // SizedBox(height: getProportionateScreenWidth(20)),
             
             SizedBox(
                         height: MediaQuery.of(context).size.height * 0.35,
@@ -297,7 +308,7 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
-  final String? currentUserId = FirebaseAuth.instance.currentUser?.uid;
+  final String? currentUserIdphone = FirebaseAuth.instance.currentUser?.phoneNumber;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -335,7 +346,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
             ],
           ),
         ),
-         (currentUserId! == "2dSnH9aE07fzdySPOsbcMeuUZk33") ? IconButton(
+         (currentUserIdphone == "+918767886904" || currentUserIdphone == "+917057702200") ? IconButton(
             onPressed: () {
               Navigator.push(
                   context,
@@ -346,6 +357,9 @@ class _CustomAppBarState extends State<CustomAppBar> {
             },
             icon: Icon(Icons.add_card)):SizedBox(),
         ChatWithUs(),
+        const SizedBox( 
+          width: 20,
+        )
       ],
     );
   }
@@ -354,18 +368,21 @@ class _CustomAppBarState extends State<CustomAppBar> {
 class ChatWithUs extends StatelessWidget {
   const ChatWithUs({
     Key? key,
-    this.onTap,
     this.size = 5,
   }) : super(key: key);
 
-  final GestureTapCallback? onTap;
+  
 
   final double size;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: (){
+          Navigator.push(context,MaterialPageRoute<void>(
+      builder: (BuildContext context) => const ChatScreen(),
+    ),);
+      },
       child: Container(
         padding: EdgeInsets.all(size),
         decoration: BoxDecoration(

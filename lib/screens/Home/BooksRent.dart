@@ -24,8 +24,7 @@ class _ProductListState extends State {
   String selectedCategory = '';
   String selectedBrand = '';
   String selectedsem='';
-  double minPrice = 0.0;
-  double maxPrice = 1000.0;
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,42 +39,7 @@ class _ProductListState extends State {
               Navigator.pop(context);
             },
             icon: const Icon(Icons.arrow_back),),
-          actions: [ 
-             GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return FilterBottomSheet(
-                      onApplyFilters: (category, brand,sem, min, max) {
-                        setState(() {
-                          selectedCategory = category;
-                          selectedBrand = brand;
-                          selectedsem=sem;
-                          minPrice = min;
-                          maxPrice = max;
-                        });
-                      },
-                    );
-                  },
-                );
-              },
-              child: Container(
-                height: 20,
-                width: 60,
-                alignment: Alignment.center,
-                decoration: BoxDecoration( 
-                  borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  border: Border.all(width: 1)
-                ),
-                child: Text("Filters",style: GoogleFonts.inter( 
-color: Color.fromARGB(255, 248, 173, 34)
-                ),),),
-            ),
-            const SizedBox( 
-              width: 30,
-            )
-          ],
+          
         ),
         // floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
         floatingActionButton: FloatingActionButton(
@@ -108,6 +72,42 @@ color: Color.fromARGB(255, 248, 173, 34)
                 ),
               ),
             ),
+             Container(
+              alignment: Alignment.centerRight,
+              padding:const EdgeInsets.only(right: 30),
+               child:Column(
+                children: [
+                IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return FilterBottomSheet(
+                          onApplyFilters: (category, brand,sem) {
+                            setState(() {
+                              selectedCategory = category;
+                              selectedBrand = brand;
+                              selectedsem=sem;
+                           
+                            });
+                          },
+                        );
+                      },
+                    );
+                  },
+                  icon:SizedBox( 
+                    height: 30,
+                    width: 40,
+                    child: Image.asset("assets/icons/filter.png",fit: BoxFit.fill,) ,
+                  ),
+                  tooltip: "Filters",
+                             ),
+                  const Text("Filters")
+                             
+                    
+               ],
+               )
+             ),
             Expanded(
               child: FutureBuilder<QuerySnapshot>(
                 future: productsCollection.get(),
@@ -586,9 +586,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                   onTap: () async {
                     await addToCart(context, widget.product);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => CartScreen()),
-                    );
+                    
                   },
                 )
               ],

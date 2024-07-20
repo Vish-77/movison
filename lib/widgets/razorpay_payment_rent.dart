@@ -9,22 +9,23 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RazorpayPayment extends StatefulWidget {
+class RazorpayPaymentRent extends StatefulWidget {
   final double amount;
   final List<String> bookName;
 
-  const RazorpayPayment({Key? key, required this.amount, required this.bookName})
+  const RazorpayPaymentRent(
+      {Key? key, required this.amount, required this.bookName})
       : super(key: key);
 
   @override
   State createState() => RazorpayPaymentState();
 }
 
-class RazorpayPaymentState extends State<RazorpayPayment> {
+class RazorpayPaymentState extends State<RazorpayPaymentRent> {
   late DateTime _currentDateTime;
   late Razorpay _razorpay;
-  User? user=FirebaseAuth.instance.currentUser;
-  String currentUid='';
+  User? user = FirebaseAuth.instance.currentUser;
+  String currentUid = '';
 
   @override
   void initState() {
@@ -34,13 +35,13 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, handleExternalWallet);
     _currentDateTime = DateTime.now();
-    currentUid=user!.uid;
+    currentUid = user!.uid;
   }
 
   void openCheckout() async {
     var options = {
       'key': '',
-      'amount': (widget.amount+40) * 100,
+      'amount': (widget.amount+40+(widget.bookName.length*100)) * 100,
       'name': 'Vishal Vijay Deshpande',
       'prefill': {'contact': '84216 70509', 'email': 'movison0320@gmail.com'},
       'external': {
@@ -54,34 +55,36 @@ class RazorpayPaymentState extends State<RazorpayPayment> {
       debugPrint('Error : e');
     }
   }
-Future<void> savePaymentHistory(String status, String paymentId) async {
-  String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
-  String time = DateFormat('kk:mm').format(DateTime.now());
 
-  // Define your Firestore collection reference
-  CollectionReference paymentHistoryCollection =
-      FirebaseFirestore.instance.collection('paymentHistory');
+  Future<void> savePaymentHistory(String status, String paymentId) async {
+    String date = DateFormat('dd-MM-yyyy').format(DateTime.now());
+    String time = DateFormat('kk:mm').format(DateTime.now());
 
-  // Prepare the payment data
-  Map<String, dynamic> paymentData = {
-    'userId':currentUid,
-    'status': status,
-    'paymentId': paymentId,
-    'amount': widget.amount, // Assuming widget.amount is accessible here
-    'bookName': widget.bookName, // Assuming widget.bookName is accessible here
-    'date': date,
-    'time': time,
-  };
+    // Define your Firestore collection reference
+    CollectionReference paymentHistoryCollection =
+        FirebaseFirestore.instance.collection('paymentHistory');
 
-  try {
-    // Add the payment data to Firestore
-    await paymentHistoryCollection.add(paymentData);
-    print('Payment history saved successfully!');
-  } catch (e) {
-    print('Failed to save payment history: $e');
-    // Handle any errors here
+    // Prepare the payment data
+    Map<String, dynamic> paymentData = {
+      'userId': currentUid,
+      'status': status,
+      'paymentId': paymentId,
+      'amount': widget.amount, // Assuming widget.amount is accessible here
+      'bookName':
+          widget.bookName, // Assuming widget.bookName is accessible here
+      'date': date,
+      'time': time,
+    };
+
+    try {
+      // Add the payment data to Firestore
+      await paymentHistoryCollection.add(paymentData);
+      print('Payment history saved successfully!');
+    } catch (e) {
+      print('Failed to save payment history: $e');
+      // Handle any errors here
+    }
   }
-}
 
   void handlePaymentSuccess(PaymentSuccessResponse response) {
     savePaymentHistory('Success', response.paymentId!);
@@ -113,14 +116,16 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String paymentHistory = prefs.getString('paymentHistory') ?? '[]';
     List<dynamic> paymentHistoryList = jsonDecode(paymentHistory);
-    return paymentHistoryList.map((item) => item as Map<String, dynamic>).toList();
+    return paymentHistoryList
+        .map((item) => item as Map<String, dynamic>)
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Razorpay Payment'),
+        title: const Text('Razorpay Payment Rent'),
         actions: [
           IconButton(
             icon: const Icon(Icons.history),
@@ -128,30 +133,31 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => PaymentHistoryScreen(currentUserId: currentUid,),
+                  builder: (context) => PaymentHistoryScreen(
+                    currentUserId: currentUid,
+                  ),
                 ),
               );
             },
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: GestureDetector(
-        onTap: openCheckout,
-        child: Container( 
-          width: 200,
-          height: 40,
-          alignment: Alignment.center,
-          decoration: BoxDecoration( 
-            borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: Color.fromARGB(255, 185, 27, 233)
-          ),
-          child: Text(
-                      "Pay ₹${widget.amount+40}",
-                      style: const TextStyle(fontSize: 20, color: Colors.white),
-                    ),
-        )
-      ),
+          onTap: openCheckout,
+          child: Container(
+            width: 200,
+            height: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                color: Color.fromARGB(255, 185, 27, 233)),
+            child: Text(
+              "Pay ₹${widget.amount+40+(widget.bookName.length*100)}",
+              style: const TextStyle(fontSize: 20, color: Colors.white),
+            ),
+          )),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 10),
         child: SingleChildScrollView(
@@ -184,7 +190,7 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
                         ),
                         const SizedBox(height: 10),
                         SizedBox(
-                         // height:60,
+                          // height:60,
                           width: 150,
                           child: Text(
                             "${widget.bookName}",
@@ -228,16 +234,32 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    Row(
+                    const Row(
                       children: [
-                        const SizedBox(width: 30),
-                        const Text(
+                        SizedBox(width: 30),
+                        Text(
                           'Delivery Charges :',
                           style: TextStyle(fontSize: 20),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Text(
-                          "₹ 40.",
+                          "₹40",
+                          style: const TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      children: [
+                        SizedBox(width: 30),
+                        Text(
+                          'Deposite (₹100 per book) :',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          "₹${widget.bookName.length*100}",
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         )
@@ -253,7 +275,7 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          "₹${widget.amount+40}",
+                          "₹${widget.amount+40+(widget.bookName.length*100)}",
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         )
@@ -262,8 +284,6 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
                   ],
                 ),
               ),
-              
-              
             ],
           ),
         ),

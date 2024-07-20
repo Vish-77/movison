@@ -19,35 +19,43 @@ class UserInfromationScreen extends StatefulWidget {
 
 class _UserInfromationScreenState extends State<UserInfromationScreen> {
   File? image;
-  File? aadhr;
+  File? aadharFront;
+  File? aadharBack;
   File? pan;
-  File? collegeId;
+  File? collegeIdPicFront;
+  File? collegeIdPicBack;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
-  final bioController = TextEditingController();
 
   @override
   void dispose() {
     super.dispose();
     nameController.dispose();
     emailController.dispose();
-    bioController.dispose();
   }
 void selectImage() async {
     image = await pickImage(context);
     setState(() {});
   }
 
-  void selectAadharImage() async {
-    aadhr = await pickImage(context);
+  void selectAadharFrontImage() async {
+    aadharFront = await pickImage(context);
+    setState(() {});
+  }
+  void selectAadharBackImage() async {
+    aadharBack = await pickImage(context);
     setState(() {});
   }
   void selectPanImage() async {
     pan = await pickImage(context);
     setState(() {});
   }
-  void selectIdImage() async {
-    collegeId = await pickImage(context);
+  void selectIdFrontImage() async {
+    collegeIdPicFront = await pickImage(context);
+    setState(() {});
+  }
+  void selectIdBackImage() async {
+    collegeIdPicBack = await pickImage(context);
     setState(() {});
   }
 
@@ -93,14 +101,14 @@ void selectImage() async {
                                 ),
                         ),
                       ),
-                      Text("Upload Aadhar Card Photo *",style: GoogleFonts.inter( 
+                      Text("Upload Aadhar Card Front Photo *",style: GoogleFonts.inter( 
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                       ),),
                        Center(
                          child: InkWell(
-                          onTap: () => selectAadharImage(),
-                          child: aadhr == null
+                          onTap: () => selectAadharFrontImage(),
+                          child: aadharFront == null
                               ? Container( 
                                   height: 100,
                                   width: 250,
@@ -120,13 +128,46 @@ void selectImage() async {
                                   child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         child: Image(
-                          image: FileImage(aadhr!),
+                          image: FileImage(aadharFront!),
                           fit: BoxFit.fill,)
                       )
                                 )
                                                ),
                        ),
-                       Text("Upload Pan Card",style: GoogleFonts.inter( 
+                                  Text("Upload Aadhar Card Back Photo *",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                       Center(
+                         child: InkWell(
+                          onTap: () => selectAadharBackImage(),
+                          child: aadharBack == null
+                              ? Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: Icon(Icons.file_copy,size: 50,),
+                                )
+                              : Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: Image(
+                          image: FileImage(aadharBack!),
+                          fit: BoxFit.fill,)
+                      )
+                                )
+                                               ),
+                       ),
+                       Text("Upload Pan Card (Optional)",style: GoogleFonts.inter( 
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                       ),),
@@ -159,14 +200,14 @@ void selectImage() async {
                                 )
                                                ),
                        ),
-                      Text("Upload CollegeId*",style: GoogleFonts.inter( 
+                      Text("Upload CollegeId (Front) *",style: GoogleFonts.inter( 
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                       ),),
                        Center(
                          child: InkWell(
-                          onTap: () => selectIdImage(),
-                          child: collegeId == null
+                          onTap: () => selectIdFrontImage(),
+                          child: collegeIdPicFront == null
                               ? Container( 
                                   height: 100,
                                   width: 250,
@@ -186,7 +227,40 @@ void selectImage() async {
                                   child: ClipRRect(
                         borderRadius: BorderRadius.all(Radius.circular(20)),
                         child: Image(
-                          image: FileImage(collegeId!),
+                          image: FileImage(collegeIdPicFront!),
+                          fit: BoxFit.fill,)
+                      )
+                                )
+                                               ),
+                       ),
+                       Text("Upload CollegeId (Back) *",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                       Center(
+                         child: InkWell(
+                          onTap: () => selectIdBackImage(),
+                          child: collegeIdPicBack == null
+                              ? Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: Icon(Icons.file_copy,size: 50,),
+                                )
+                              :Container( 
+                                  height: 100,
+                                  width: 250,
+                                  decoration: BoxDecoration( 
+                                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                                    border: Border.all(width: .8),
+                                  ),
+                                  child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: Image(
+                          image: FileImage(collegeIdPicBack!),
                           fit: BoxFit.fill,)
                       )
                                 )
@@ -203,14 +277,7 @@ void selectImage() async {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // name field
-                            // textFeld(
-                            //   hintText: "Siddhant Hole",
-                            //   icon: Icons.account_circle,
-                            //   inputType: TextInputType.name,
-                            //   maxLines: 1,
-                            //   controller: nameController,
-                            // ),
+                           
                             
                             nameTextField(),
                             SizedBox(height: 10),
@@ -298,27 +365,31 @@ void storeData() async {
     UserModel userModel = UserModel(
       name: nameController.text.trim(),
       email: emailController.text.trim(),
-      bio: bioController.text.trim(),
       profilePic: "",
       createdAt: "",
       phoneNumber: "",
       uid: "",
       univercity: '',
+      college: '',
       branch: '',
       sem: '',
-      aadharPic: '',
+      aadharFront: '',
+      aadharBack: '',
       panPic: '',
-      collegeIdPic: '',
+      collegeIdPicFront: '',
+      collegeIdPicBack: ''
 
     );
-    if (image != null && aadhr !=null && collegeId != null && nameController.text.isNotEmpty && emailController.text.isNotEmpty) {
+    if (image != null && aadharFront !=null && aadharBack!= null && collegeIdPicFront != null && collegeIdPicBack != null && nameController.text.isNotEmpty && emailController.text.isNotEmpty) {
       ap.saveUserDataToFirebase(
         context: context,
         userModel: userModel,
         profilePic: image!,
-        aadharPic:aadhr!,
-        panPic:pan!,
-        collegeIdPic:collegeId!,
+        aadharFront:aadharFront!,
+        aadharBack: aadharBack!,
+        panPic:pan,
+        collegeIdPicFront:collegeIdPicFront!,
+        collegeIdPicBack: collegeIdPicBack!,
         onSuccess: () {
           ap.saveUserDataToSP().then(
                 (value) => ap.setSignIn().then(

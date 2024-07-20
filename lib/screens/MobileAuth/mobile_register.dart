@@ -75,86 +75,89 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  TextFormField(
-                    cursorColor: Colors.orangeAccent,
-                    controller: phoneController,
-                    keyboardType: TextInputType.phone,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        phoneController.text = value;
-                      });
-                    },
-                    decoration: InputDecoration(
-                      hintText: "Enter phone number",
-                      hintStyle: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 15,
-                        color: Colors.grey.shade600,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.black12),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: const BorderSide(color: Colors.black12),
-                      ),
-                      prefixIcon: Container(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                showCountryPicker(
-                                    context: context,
-                                    countryListTheme:
-                                        const CountryListThemeData(
-                                      bottomSheetHeight: 550,
-                                    ),
-                                    onSelect: (value) {
-                                      setState(() {
-                                        selectedCountry = value;
-                                      });
-                                    });
-                              },
-                              child: Text(
-                                "${selectedCountry.flagEmoji} + ${selectedCountry.phoneCode}",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      suffixIcon: phoneController.text.length > 9
-                          ? Container(
-                              height: 30,
-                              width: 30,
-                              margin: const EdgeInsets.all(10.0),
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.green,
-                              ),
-                              child: const Icon(
-                                Icons.done,
-                                color: Colors.white,
-                                size: 20,
-                              ),
-                            )
-                          : null,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
+              TextFormField(
+  cursorColor: Colors.orangeAccent,
+  controller: phoneController,
+  keyboardType: TextInputType.phone,
+  style: const TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  ),
+  onChanged: (value) {
+    setState(() {
+      phoneController.text = value;
+      if (value.length == 10) {
+        FocusScope.of(context).unfocus();
+      }
+    });
+  },
+  decoration: InputDecoration(
+    hintText: "Enter phone number",
+    hintStyle: TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 15,
+      color: Colors.grey.shade600,
+    ),
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.black12),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(color: Colors.black12),
+    ),
+    prefixIcon: Container(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 4,
+          ),
+          InkWell(
+            onTap: () {
+              showCountryPicker(
+                context: context,
+                countryListTheme: const CountryListThemeData(
+                  bottomSheetHeight: 550,
+                ),
+                onSelect: (value) {
+                  setState(() {
+                    selectedCountry = value;
+                  });
+                },
+              );
+            },
+            child: Text(
+              "${selectedCountry.flagEmoji} + ${selectedCountry.phoneCode}",
+              style: const TextStyle(
+                fontSize: 18,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+    suffixIcon: phoneController.text.length > 9
+        ? Container(
+            height: 30,
+            width: 30,
+            margin: const EdgeInsets.all(10.0),
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.green,
+            ),
+            child: const Icon(
+              Icons.done,
+              color: Colors.white,
+              size: 20,
+            ),
+          )
+        : null,
+  ),
+),
+   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
                     height: screenHeight * 0.07,
@@ -163,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () => sendPhoneNumber(),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 40),
                   if (isLoading)
                     const CircularProgressIndicator(),
                 ],
@@ -176,8 +179,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
    void sendPhoneNumber() async {
+    isLoading = true;
     setState(() {
-      isLoading = true;
+      
     });
 
     final ap = Provider.of<AuthProvider>(context, listen: false);
