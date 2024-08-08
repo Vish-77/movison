@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart';
-import 'package:movison/screens/MobileAuth/authprovider.dart' as movison_authProvider;
+
 import 'package:movison/screens/MobileAuth/usermodel.dart';
 import 'package:movison/theme/color.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +13,7 @@ class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
 
   @override
-  _EditProfileScreenState createState() => _EditProfileScreenState();
+  State createState() => _EditProfileScreenState();
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
@@ -31,7 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   bool isUserLoaded = false;
   bool isSubmitting=false;
    Future<void> getData() async {
-    final ap = Provider.of<movison_authProvider.AuthProvider>(context,
+    final ap = Provider.of<AuthProvider>(context,
         listen: false); // Use the alias
 
     await ap.getDataFromSP();
@@ -151,7 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   child: Container(
                     height: 100,
                     width: 100,
-                    decoration: BoxDecoration( 
+                    decoration: const BoxDecoration( 
                       borderRadius: BorderRadius.all(Radius.circular(100))
                     ),
                     
@@ -325,7 +325,7 @@ Widget _buildSection2() {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Adhar Front : ",
+                  "Adhar Card Front : ",
                   style: GoogleFonts.lato(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -377,7 +377,7 @@ Widget _buildSection2() {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Adhar Back : ",
+                  "Adhar Card Back : ",
                   style: GoogleFonts.lato(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -427,7 +427,7 @@ Widget _buildSection2() {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Pan : ",
+                  "Pan Card : ",
                   style: GoogleFonts.lato(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -481,7 +481,7 @@ Widget _buildSection2() {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "CollegeId Front : ",
+                  "CollegeId (Front) : ",
                   style: GoogleFonts.lato(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
@@ -531,7 +531,7 @@ Widget _buildSection2() {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "CollegeId Back : ",
+                  "CollegeId (Back) : ",
                   style: GoogleFonts.lato(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,

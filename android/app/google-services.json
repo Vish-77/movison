@@ -12,7 +12,16 @@
           "package_name": "om.example.movison"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1007217420625-s95mq6ogq35umk5925ilea6vvk215843.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "om.example.movison",
+            "certificate_hash": "d59861c25a85ab9a4a60b4a7f629f1f3a225cbca"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDI9W5yu6EvIrsSD0Fp4Qp86ECkSwnLghg"

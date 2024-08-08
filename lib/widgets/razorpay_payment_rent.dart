@@ -89,20 +89,20 @@ class RazorpayPaymentState extends State<RazorpayPaymentRent> {
   void handlePaymentSuccess(PaymentSuccessResponse response) {
     savePaymentHistory('Success', response.paymentId!);
     Fluttertoast.showToast(
-        msg: "Payment Successful " + response.paymentId!,
+        msg: "Payment Successful ${response.paymentId!}",
         toastLength: Toast.LENGTH_SHORT);
   }
 
   void handlePaymentError(PaymentFailureResponse response) {
     savePaymentHistory('Failure', response.code.toString());
     Fluttertoast.showToast(
-        msg: "Payment Failed " + response.message!,
+        msg: "Payment Failed ${response.message!}",
         toastLength: Toast.LENGTH_SHORT);
   }
 
   void handleExternalWallet(ExternalWalletResponse response) {
     Fluttertoast.showToast(
-        msg: "External Wallet " + response.walletName!,
+        msg: "External Wallet ${response.walletName!}",
         toastLength: Toast.LENGTH_SHORT);
   }
 
@@ -150,7 +150,7 @@ class RazorpayPaymentState extends State<RazorpayPaymentRent> {
             width: 200,
             height: 40,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(20)),
                 color: Color.fromARGB(255, 185, 27, 233)),
             child: Text(
@@ -244,7 +244,7 @@ class RazorpayPaymentState extends State<RazorpayPaymentRent> {
                         SizedBox(height: 10),
                         Text(
                           "₹40",
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         )
                       ],
@@ -252,12 +252,12 @@ class RazorpayPaymentState extends State<RazorpayPaymentRent> {
                     const SizedBox(height: 20),
                     Row(
                       children: [
-                        SizedBox(width: 30),
-                        Text(
+                        const SizedBox(width: 30),
+                        const Text(
                           'Deposite (₹100 per book) :',
                           style: TextStyle(fontSize: 20),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Text(
                           "₹${widget.bookName.length*100}",
                           style: const TextStyle(

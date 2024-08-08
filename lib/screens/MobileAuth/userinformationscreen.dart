@@ -7,6 +7,7 @@ import 'package:movison/screens/MobileAuth/custom_button_in_mobile_auth.dart';
 import 'package:movison/screens/MobileAuth/snackbar.dart';
 import 'package:movison/screens/MobileAuth/usermodel.dart';
 import 'package:movison/widgets/custom_surfix_icon.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'package:provider/provider.dart';
 
@@ -33,29 +34,97 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
     nameController.dispose();
     emailController.dispose();
   }
+
+    @override
+  void initState() {
+    super.initState();
+    checkPermissionsAndNetwork();
+  }
+
+  Future<void> checkPermissionsAndNetwork() async {
+    await requestPermissions();
+   
+  }
+
+  Future<void> requestPermissions() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.photos,
+      Permission.location,
+    ].request();
+
+    if (
+        statuses[Permission.photos]!.isDenied 
+        ) {
+      showSnackBar(context, "Permissions are required for the app to function properly.");
+    }
+  }
 void selectImage() async {
-    image = await pickImage(context);
+   var status = await Permission.photos.status;
+    if (status.isDenied) {
+      showSnackBar(context, "Photo permission is required to upload images.");
+      await Permission.photos.request();
+    } else {
+      image = await pickImage(context);
+    }
+    
     setState(() {});
   }
 
   void selectAadharFrontImage() async {
-    aadharFront = await pickImage(context);
+    var status = await Permission.photos.status;
+    if (status.isDenied) {
+      showSnackBar(context, "Photo permission is required to upload images.");
+      await Permission.photos.request();
+    } else {
+     aadharFront = await pickImage(context);
+    }
+    
+    
     setState(() {});
   }
   void selectAadharBackImage() async {
-    aadharBack = await pickImage(context);
+    var status = await Permission.photos.status;
+    if (status.isDenied) {
+      showSnackBar(context, "Photo permission is required to upload images.");
+      await Permission.photos.request();
+    } else {
+       aadharBack = await pickImage(context);
+    }
+   
     setState(() {});
   }
   void selectPanImage() async {
-    pan = await pickImage(context);
+    var status = await Permission.photos.status;
+    if (status.isDenied) {
+      showSnackBar(context, "Photo permission is required to upload images.");
+      await Permission.photos.request();
+    } else {
+       pan = await pickImage(context);
+    }
+   
     setState(() {});
   }
   void selectIdFrontImage() async {
-    collegeIdPicFront = await pickImage(context);
+    var status = await Permission.photos.status;
+    if (status.isDenied) {
+      showSnackBar(context, "Photo permission is required to upload images.");
+      await Permission.photos.request();
+    } else {
+  collegeIdPicFront = await pickImage(context);
+    }
+  
     setState(() {});
   }
   void selectIdBackImage() async {
-    collegeIdPicBack = await pickImage(context);
+    var status = await Permission.photos.status;
+    if (status.isDenied) {
+      showSnackBar(context, "Photo permission is required to upload images.");
+      await Permission.photos.request();
+    } else {
+      collegeIdPicBack = await pickImage(context);
+    }
+    
     setState(() {});
   }
 

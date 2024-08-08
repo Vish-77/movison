@@ -57,9 +57,9 @@ class CartBuyScreen extends StatelessWidget {
           height: 40,
           width: 100,
           alignment: Alignment.center,
-          decoration: BoxDecoration( 
+          decoration: const BoxDecoration( 
             borderRadius: BorderRadius.all(Radius.circular(20)),
-            color: const Color.fromARGB(255, 192, 30, 233)
+            color: Color.fromARGB(255, 192, 30, 233)
           ),
           child: const Text("Buy All",style: const TextStyle(fontSize: 20, color: Colors.white),)),),
         body: Stack(children: [

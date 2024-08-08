@@ -10,7 +10,7 @@ class ProductEntryScreen extends StatefulWidget {
   const ProductEntryScreen({super.key});
 
   @override
-  _ProductEntryScreenState createState() => _ProductEntryScreenState();
+  State createState() => _ProductEntryScreenState();
 }
 
 class _ProductEntryScreenState extends State<ProductEntryScreen> {
@@ -39,11 +39,9 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
 
     if (user != null) {
       String userId = user.uid;
-      print(userId);
+     
       return userId;
     } else {
-      // No user is signed in
-      print("null");
       return null;
     }
   }
@@ -68,23 +66,6 @@ class _ProductEntryScreenState extends State<ProductEntryScreen> {
     );
   }
 
-  Future<void> _showLoadingDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return const AlertDialog(
-          content: Row(
-            children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 16),
-              Text("Adding product..."),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   Future<void> _hideLoadingDialog(BuildContext context) async {
     Navigator.of(context).pop();
@@ -297,7 +278,7 @@ _buildBody(),
 
         if (userId.isEmpty) {
           // Show error dialog if user ID is not retrieved
-          print( "Failed to get user ID. Please try again.");
+        
           return;
         }
                     File imageFile = File(imagePathController.text);

@@ -10,9 +10,9 @@ import 'package:movison/screens/MobileAuth/usermodel.dart';
 import 'package:movison/screens/Payment/paymenthist.dart';
 import 'package:movison/screens/Personal/personalInfo.dart';
 import 'package:movison/screens/Privacy/privacypolicy.dart';
+import 'package:movison/screens/Terms/terms_condition.dart';
 import 'package:movison/theme/color.dart';
 import 'package:movison/widgets/profile_pic.dart';
-import 'package:movison/widgets/setting_box.dart';
 import 'package:movison/widgets/setting_item.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +20,7 @@ class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
 
   @override
-  _AccountPageState createState() => _AccountPageState();
+  State createState() => _AccountPageState();
 }
 
 class _AccountPageState extends State<AccountPage> {
@@ -35,8 +35,7 @@ class _AccountPageState extends State<AccountPage> {
     setState(() {
       u = ap.userModel;
       isUserLoaded = true;
-      print(u!.profilePic);
-      print(u!.name);
+     
     });
   }
 
@@ -63,21 +62,6 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  _buildHeader() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          "Profile",
-          style: TextStyle(
-            color: AppColor.textColor,
-            fontSize: 24,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildBody() {
     return RefreshIndicator(
@@ -132,37 +116,6 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 
-  Widget _buildRecord() {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Expanded(
-          child: SettingBox(
-            title: "12 courses",
-            icon: "assets/icons/work.svg",
-          ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: SettingBox(
-            title: "55 hours",
-            icon: "assets/icons/time.svg",
-          ),
-        ),
-        SizedBox(
-          width: 10,
-        ),
-        Expanded(
-          child: SettingBox(
-            title: "4.8",
-            icon: "assets/icons/star.svg",
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildSection1() {
     return Container(
@@ -270,10 +223,16 @@ class _AccountPageState extends State<AccountPage> {
       ),
       child: Column(
         children: [
-          const SettingItem(
+          SettingItem(
             title: "Terms & Conditions",
             leadingIcon: "assets/icons/bell1.svg",
             bgIconColor: AppColor.purple,
+            onTap: (){
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TermsPage()),
+              );
+            },
           ),
           Padding(
             padding: const EdgeInsets.only(left: 45),
@@ -289,7 +248,7 @@ class _AccountPageState extends State<AccountPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => PrivacyPolicyPage()),
+                MaterialPageRoute(builder: (context) => const PrivacyPolicyPage()),
               );
             },
           ),
@@ -344,9 +303,9 @@ Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Confirm Logout'),
-        content: SingleChildScrollView(
+        content: const SingleChildScrollView(
           child: ListBody(
-            children: const <Widget>[
+            children: <Widget>[
               Text('Are you sure you want to log out?'),
             ],
           ),

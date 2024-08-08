@@ -7,16 +7,18 @@ import 'package:movison/screens/Home/ProductModel.dart';
 import 'package:movison/widgets/myBuyCart.dart';
 
 class BuyList extends StatefulWidget {
+  const BuyList({super.key});
+
   @override
   State createState() => _ProductListState();
 }
 class FilterBottomSheet extends StatefulWidget {
   final Function(String, String,String) onApplyFilters;
 
-  FilterBottomSheet({required this.onApplyFilters});
+  const FilterBottomSheet({super.key, required this.onApplyFilters});
 
   @override
-  _FilterBottomSheetState createState() => _FilterBottomSheetState();
+  State createState() => _FilterBottomSheetState();
 }
 
 class _FilterBottomSheetState extends State<FilterBottomSheet> {
@@ -28,13 +30,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 20,right: 20,top: 20),
+      padding: const EdgeInsets.only(left: 20,right: 20,top: 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ListTile(title: Center(child: Text('Filters'))),
+          const ListTile(title: Center(child: Text('Filters'))),
           ListTile(
-            title: Text('University'),
+            title: const Text('University'),
             trailing: SizedBox(
               width: 150, // Set a fixed width for the trailing widget
               child: DropdownButton<String>(
@@ -54,7 +56,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
           ),
           ListTile(
-            title: Text('Branch'),
+            title: const Text('Branch'),
             trailing: SizedBox(
               width: 150, // Set a fixed width for the trailing widget
               child: DropdownButton<String>(
@@ -74,7 +76,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             ),
           ),
           ListTile(
-            title: Text('Semester'),
+            title: const Text('Semester'),
             trailing: SizedBox(
               width: 150, // Set a fixed width for the trailing widget
               child: DropdownButton<String>(
@@ -99,7 +101,7 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               widget.onApplyFilters(selectedCategory, selectedBrand, selectedsem);
               Navigator.pop(context);
             },
-            child: Text('Apply Filters'),
+            child: const Text('Apply Filters'),
           ),
         ],
       ),
@@ -297,7 +299,7 @@ class _ProductListState extends State {
         );
       }
     } catch (e) {
-      print('Error adding product to cart: $e');
+      
     }
   }
 }
@@ -306,7 +308,7 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final Function(BuildContext, Product) addToCart;
 
-  const ProductCard({
+  const ProductCard({super.key, 
     required this.product,
     required this.addToCart,
   });

@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:movison/screens/Home/Availablebooks.dart';
 import 'package:movison/screens/Home/addbooks.dart';
 import 'package:movison/screens/Home/comminggrid.dart';
 import 'package:movison/screens/Home/feedBack.dart';
@@ -17,76 +16,20 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  State createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       //backgroundColor: Colors.black87,
       body: Body(),
       bottomNavigationBar:
-          const CustomBottomNavBar(selectedMenu: MenuState.home),
+          CustomBottomNavBar(selectedMenu: MenuState.home),
     );
   }
 
-  _buildBody() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 15,
-          ),
-          //_buildCategories(),
-          const SizedBox(
-            height: 15,
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
-            child: Text(
-              "Featured",
-              style: TextStyle(
-                color: AppColor.textColor,
-                fontWeight: FontWeight.w600,
-                fontSize: 24,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 0, // Adjust the height based on your preference
-          ),
-
-          const SizedBox(
-            height: 15,
-          ),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Available Books",
-                  style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: AppColor.textColor),
-                ),
-                Text(
-                  "See all",
-                  style: TextStyle(fontSize: 14, color: AppColor.darker),
-                ),
-              ],
-            ),
-          ),
-          // _buildRecommended(),
-          AvailableBooks(),
-        ],
-      ),
-    );
-  }
 
 }
 
@@ -133,7 +76,7 @@ class _CategorySectionState extends State<CategorySection> {
 
 void _onCategoryTap(Map<String, dynamic> categoryData,BuildContext context) {
   // Navigate to the corresponding category page based on the category name
-  print("onswitch");
+ 
   switch (categoryData["name"]) {
     case "Rent":
       // Navigate to the "All" category page
@@ -239,6 +182,8 @@ class CircleSkeleton extends StatelessWidget {
 }
 
 class Body extends StatelessWidget {
+  const Body({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -247,7 +192,7 @@ class Body extends StatelessWidget {
           children: [
             SizedBox(height: getProportionateScreenWidth(10)),
             //HomeHeader(),
-            CustomAppBar(),
+            const CustomAppBar(),
             SizedBox(height: getProportionateScreenWidth(20)),
             Padding(
               padding: const EdgeInsets.only(left: 30.0, right: 30),
@@ -260,7 +205,7 @@ class Body extends StatelessWidget {
                     itemCount: banner.length,
                     itemBuilder: (context, index) {
                       return ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        borderRadius: const BorderRadius.all(Radius.circular(5)),
                         child: Image.asset(
                           banner[index],
                           //width: 300,
@@ -275,11 +220,11 @@ class Body extends StatelessWidget {
               ),
             ),
             SizedBox(height: getProportionateScreenWidth(20)),
-            CategorySection(),
+            const CategorySection(),
             SizedBox(height: getProportionateScreenHeight(20),),
             Container(
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(left: 40),
+              padding: const EdgeInsets.only(left: 40),
               child: const Text("Comming Soon",style:TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.w500,
@@ -355,8 +300,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
                         const ProductEntryScreen(),
                   ));
             },
-            icon: Icon(Icons.add_card)):SizedBox(),
-        ChatWithUs(),
+            icon: const Icon(Icons.add_card)):const SizedBox(),
+        const ChatWithUs(),
         const SizedBox( 
           width: 20,
         )

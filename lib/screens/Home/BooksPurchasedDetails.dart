@@ -1,9 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
@@ -32,7 +29,7 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
   final startDateTime = DateTime.now();
   DateTime endDateTime = DateTime(2023, 4, 10, 10, 0, 0);
   late Timer _timer;
-  Duration _duration = Duration();
+  Duration _duration = const Duration();
 
   @override
   void initState() {
@@ -71,7 +68,7 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
           children: [
             Card(
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   prefixIcon: Icon(Icons.search, color: Colors.black),
                   hintText: 'Search for product',
                 ),
@@ -113,7 +110,7 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                             },
                              child: Card(
                       elevation: 4, // Add elevation for a raised effect
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -132,7 +129,7 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                               //     colors: [Color(0xFF846AFF), Color(0xFF755EE8), Colors.purpleAccent,Colors.amber,],
                               //     begin: Alignment.topLeft,
                               //     end: Alignment.bottomRight)),
-                              color: Color(0xFFF5F6F9)),
+                              color: const Color(0xFFF5F6F9)),
 
                           child: SingleChildScrollView(
                             child: Column(
@@ -148,13 +145,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/User.svg", press: () {  },),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child: Text(
                                     "Name : " + snapshot.data?.docs[index]['name'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.deepOrange,
@@ -186,13 +183,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/Gift Icon.svg", press: () {  },),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child:Text(
                                   "BookPublication : " + snapshot.data?.docs[index]['publication'],
-                                   style: TextStyle(
+                                   style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
@@ -218,13 +215,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/Bill Icon.svg", press: () {  },),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child:Text(
                                   "${"Date Of Deal: " + snapshot.data?.docs[index]['purchase_date']} ",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
@@ -246,13 +243,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/clock2.svg", press: () {  },),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child:Text(
                                   "Return Time: ${snapshot.data?.docs[index]['return_date']}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
@@ -293,7 +290,7 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                             },
                              child: Card(
                       elevation: 4, // Add elevation for a raised effect
-                      margin: EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
@@ -312,7 +309,7 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                               //     colors: [Color(0xFF846AFF), Color(0xFF755EE8), Colors.purpleAccent,Colors.amber,],
                               //     begin: Alignment.topLeft,
                               //     end: Alignment.bottomRight)),
-                              color: Color(0xFFF5F6F9)),
+                              color: const Color(0xFFF5F6F9)),
 
                           child: SingleChildScrollView(
                             child: Column(
@@ -328,13 +325,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/User.svg", press: () {  },),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child: Text(
                                     "Name : " + snapshot.data?.docs[index]['name'],
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.deepOrange,
@@ -366,13 +363,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/Gift Icon.svg", press: () {  },),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child:Text(
                                   "BookPublication : " + snapshot.data?.docs[index]['publication'],
-                                   style: TextStyle(
+                                   style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
@@ -398,13 +395,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/Bill Icon.svg", press: () {  },),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child:Text(
                                   "${"Date Of Deal: " + snapshot.data?.docs[index]['purchase_date']} ",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
@@ -426,13 +423,13 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                                 // ),
                                 CategoryCard1(icon: "assets/icons/clock2.svg", press: () {},),
                                 
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
                                   child:Text(
                                   "Return Time: ${snapshot.data?.docs[index]['return_date']}",
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                               ),
@@ -458,38 +455,38 @@ class _BookPurchasedetailsState extends State<BookPurchasedetails> {
                     return Container();
                   });
             } else {
-              return Container(
+              return SizedBox(
                   width: MediaQuery.of(context).size.width / 1.2,
                   height: MediaQuery.of(context).size.width / 1.2,
                   //child: CircularProgressIndicator(),
-                  child: Row(
+                  child: const Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Skeleton(
+                      Skeleton(
                         height: 120,
                         width: 120,
                       ),
-                      const SizedBox(
+                      SizedBox(
                         width: 16,
                       ),
                       Expanded(
                           child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Skeleton(width: 80),
-                          const SizedBox(
+                          Skeleton(width: 80),
+                          SizedBox(
                             height: 8,
                           ),
-                          const Skeleton(),
-                          const SizedBox(
+                          Skeleton(),
+                          SizedBox(
                             height: 8,
                           ),
-                          const Skeleton(),
-                          const SizedBox(
+                          Skeleton(),
+                          SizedBox(
                             height: 8,
                           ),
                           Row(
-                            children: const [
+                            children: [
                               Expanded(child: Skeleton()),
                               SizedBox(
                                 width: 16,
@@ -540,12 +537,12 @@ class CategoryCard1 extends StatelessWidget {
               height: getProportionateScreenWidth(30),
               width: getProportionateScreenWidth(30),
               decoration: BoxDecoration(
-                color: Color(0xFFFFECDF),
+                color: const Color(0xFFFFECDF),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: SvgPicture.asset(icon!),
             ),
-            SizedBox(height: 5),
+            const SizedBox(height: 5),
             //Text(text!, textAlign: TextAlign.center)
           ],
         ),

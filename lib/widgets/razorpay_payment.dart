@@ -76,9 +76,9 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
   try {
     // Add the payment data to Firestore
     await paymentHistoryCollection.add(paymentData);
-    print('Payment history saved successfully!');
+  
   } catch (e) {
-    print('Failed to save payment history: $e');
+   
     // Handle any errors here
   }
 }
@@ -86,20 +86,20 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
   void handlePaymentSuccess(PaymentSuccessResponse response) {
     savePaymentHistory('Success', response.paymentId!);
     Fluttertoast.showToast(
-        msg: "Payment Successful " + response.paymentId!,
+        msg: "Payment Successful ${response.paymentId!}",
         toastLength: Toast.LENGTH_SHORT);
   }
 
   void handlePaymentError(PaymentFailureResponse response) {
     savePaymentHistory('Failure', response.code.toString());
     Fluttertoast.showToast(
-        msg: "Payment Failed " + response.message!,
+        msg: "Payment Failed ${response.message!}",
         toastLength: Toast.LENGTH_SHORT);
   }
 
   void handleExternalWallet(ExternalWalletResponse response) {
     Fluttertoast.showToast(
-        msg: "External Wallet " + response.walletName!,
+        msg: "External Wallet ${response.walletName!}",
         toastLength: Toast.LENGTH_SHORT);
   }
 
@@ -142,7 +142,7 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
           width: 200,
           height: 40,
           alignment: Alignment.center,
-          decoration: BoxDecoration( 
+          decoration: const BoxDecoration( 
             borderRadius: BorderRadius.all(Radius.circular(20)),
             color: Color.fromARGB(255, 185, 27, 233)
           ),
@@ -228,17 +228,17 @@ Future<void> savePaymentHistory(String status, String paymentId) async {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    Row(
+                    const Row(
                       children: [
-                        const SizedBox(width: 30),
-                        const Text(
+                        SizedBox(width: 30),
+                        Text(
                           'Delivery Charges :',
                           style: TextStyle(fontSize: 20),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10),
                         Text(
                           "₹ 40.",
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18),
                         )
                       ],

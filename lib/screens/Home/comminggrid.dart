@@ -59,6 +59,13 @@ class _CommingListState extends State{
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(color: Colors.grey, width: 2),
+                    boxShadow:const [ 
+                      BoxShadow(color: Colors.black12,offset: Offset(-4, 4),blurRadius: 5),
+                     // BoxShadow(color: Colors.black,offset: Offset(4, 4),blurRadius: 0.5),
+                      BoxShadow(color: Colors.black12,offset: Offset(4, -4),blurRadius: 5),
+                     // BoxShadow(color: Colors.black,offset: Offset(-4, -4),blurRadius: 0.5),
+                      
+                    ]
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(16)),

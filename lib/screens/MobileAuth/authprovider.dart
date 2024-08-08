@@ -136,7 +136,7 @@ class AuthProvider extends ChangeNotifier {
   required File aadharBack,
   required File? panPic,
   required File collegeIdPicFront,
-  required File collegeIdPicBack
+  required File collegeIdPicBack, 
 }) async {
   _isLoading = true;
   notifyListeners();

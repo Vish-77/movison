@@ -10,7 +10,7 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History'),
+        title: const Text('History'),
         centerTitle: true,
       ),
       body: StreamBuilder<QuerySnapshot>(
@@ -23,7 +23,7 @@ class HistoryScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (snapshot.hasError) {
@@ -31,7 +31,7 @@ class HistoryScreen extends StatelessWidget {
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No Book Purchase history found.'));
+            return const Center(child: Text('No Book Purchase history found.'));
           }
 
           List<Map<String, dynamic>> paymentHistory = snapshot.data!.docs.map((doc) {
@@ -45,17 +45,17 @@ class HistoryScreen extends StatelessWidget {
           }).toList();
 
           return ListView.builder(
-            padding: EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             itemCount: paymentHistory.length,
             itemBuilder: (context, index) {
               final payment = paymentHistory[index];
               return Container(
-                margin: EdgeInsets.only(bottom: 10),
-                padding: EdgeInsets.all(10),
+                margin: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 230, 196, 240),
+                  color: const Color.fromARGB(255, 230, 196, 240),
                   borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Color.fromARGB(255, 165, 164, 164),
                       spreadRadius: 1,
@@ -74,7 +74,7 @@ class HistoryScreen extends StatelessWidget {
                     children: [
                       Text(
                         "₹${payment['amount']}",
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),

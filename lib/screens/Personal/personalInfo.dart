@@ -252,7 +252,7 @@ class _PersonalInfo extends State<PersonalInfo> {
                 ),
               ),
             ),
-            _buildImageSection("Aadhar Front : ", u!.aadharFront, _isLoadingAadharFront, () {
+            _buildImageSection("Aadhar Card Front : ", u!.aadharFront, _isLoadingAadharFront, () {
               setState(() {
                 _isLoadingAadharFront = true;
               });
@@ -263,7 +263,7 @@ class _PersonalInfo extends State<PersonalInfo> {
                 });
               });
             }),
-            _buildImageSection("Aadhar Back : ", u!.aadharBack, _isLoadingAadharBack, () {
+            _buildImageSection("Aadhar Card Back : ", u!.aadharBack, _isLoadingAadharBack, () {
               setState(() {
                 _isLoadingAadharBack = true;
               });
@@ -274,7 +274,7 @@ class _PersonalInfo extends State<PersonalInfo> {
                 });
               });
             }),
-            _buildImageSection("Pan : ", u!.panPic, _isLoadingPan, () {
+            _buildImageSection("Pan Card: ", u!.panPic, _isLoadingPan, () {
               setState(() {
                 _isLoadingPan = true;
               });
@@ -285,7 +285,7 @@ class _PersonalInfo extends State<PersonalInfo> {
                 });
               });
             }),
-            _buildImageSection("CollegeId Front : ", u!.collegeIdPicFront, _isLoadingCollegeIdFront, () {
+            _buildImageSection("CollegeId (Front) : ", u!.collegeIdPicFront, _isLoadingCollegeIdFront, () {
               setState(() {
                 _isLoadingCollegeIdFront = true;
               });
@@ -296,7 +296,7 @@ class _PersonalInfo extends State<PersonalInfo> {
                 });
               });
             }),
-            _buildImageSection("CollegeId Back : ", u!.collegeIdPicBack, _isLoadingCollegeIdBack, () {
+            _buildImageSection("CollegeId (Back) : ", u!.collegeIdPicBack, _isLoadingCollegeIdBack, () {
               setState(() {
                 _isLoadingCollegeIdBack = true;
               });
