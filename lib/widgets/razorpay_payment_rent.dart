@@ -40,7 +40,7 @@ class RazorpayPaymentState extends State<RazorpayPaymentRent> {
 
   void openCheckout() async {
     var options = {
-      'key': '',
+      'key': 'rzp_test_VKrZNPvE62B4bu',
       'amount': (widget.amount+40+(widget.bookName.length*100)) * 100,
       'name': 'Vishal Vijay Deshpande',
       'prefill': {'contact': '84216 70509', 'email': 'movison0320@gmail.com'},

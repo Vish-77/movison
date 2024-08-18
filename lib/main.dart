@@ -26,10 +26,7 @@ Future<void> main() async {
         : null,
   );
 
-  // Activate Firebase App Check
-  await FirebaseAppCheck.instance.activate(
-    androidProvider: AndroidProvider.playIntegrity,
-  );
+  //Activate Firebase App Check
     SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
