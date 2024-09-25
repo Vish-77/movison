@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:movison/screens/Home/ProductModel.dart';
-import 'package:movison/widgets/razorpay_payment_rent.dart';
+import 'package:movison/widgets/chashfree_payment_rent.dart';
 
 
 class CartScreen extends StatelessWidget {
@@ -53,7 +53,7 @@ class CartScreen extends StatelessWidget {
             Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RazorpayPaymentRent(
+                        builder: (context) => CashfreePaymentRent(
                           amount: amount,
                           bookName : Buyproduct
                         ),
@@ -503,7 +503,7 @@ class _ProductDetailScreenState extends State<CartDetailScreen> {
                      Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RazorpayPaymentRent(
+                        builder: (context) => CashfreePaymentRent(
                           amount: widget.product.price,
                           bookName : [widget.product.name]
                         ),

@@ -60,9 +60,12 @@ class AuthProvider extends ChangeNotifier {
       //await _firebaseAuth.setSettings(appVerificationDisabledForTesting: true);
       await _firebaseAuth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
+          timeout: const Duration(minutes: 2),
           verificationCompleted:
               (PhoneAuthCredential phoneAuthCredential) async {
-            await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+            // await _firebaseAuth.signInWithCredential(phoneAuthCredential);
+             
+            //  showSnackBar(context, phoneAuthCredential.toString());
           },
           verificationFailed: (error) {
             throw Exception(error.message);
@@ -78,6 +81,7 @@ class AuthProvider extends ChangeNotifier {
               ),
             );
           },
+
           codeAutoRetrievalTimeout: (verificationId) {});
     } on FirebaseAuthException catch (e) {
       showSnackBar(context, e.message.toString());

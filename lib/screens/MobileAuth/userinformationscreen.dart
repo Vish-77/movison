@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movison/screens/Home/HomeScreen.dart';
@@ -6,6 +7,8 @@ import 'package:movison/screens/MobileAuth/authprovider.dart';
 import 'package:movison/screens/MobileAuth/custom_button_in_mobile_auth.dart';
 import 'package:movison/screens/MobileAuth/snackbar.dart';
 import 'package:movison/screens/MobileAuth/usermodel.dart';
+import 'package:movison/screens/Privacy/privacypolicy.dart';
+import 'package:movison/screens/Terms/terms_condition.dart';
 import 'package:movison/widgets/custom_surfix_icon.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -27,6 +30,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
   File? collegeIdPicBack;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
+  bool _isChecked=false;
 
   @override
   void dispose() {
@@ -60,70 +64,46 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
     }
   }
 void selectImage() async {
-   var status = await Permission.photos.status;
-    if (status.isDenied) {
-      showSnackBar(context, "Photo permission is required to upload images.");
-      await Permission.photos.request();
-    } else {
+  
       image = await pickImage(context);
-    }
+    
     
     setState(() {});
   }
 
   void selectAadharFrontImage() async {
-    var status = await Permission.photos.status;
-    if (status.isDenied) {
-      showSnackBar(context, "Photo permission is required to upload images.");
-      await Permission.photos.request();
-    } else {
+    
      aadharFront = await pickImage(context);
-    }
+    
     
     
     setState(() {});
   }
   void selectAadharBackImage() async {
-    var status = await Permission.photos.status;
-    if (status.isDenied) {
-      showSnackBar(context, "Photo permission is required to upload images.");
-      await Permission.photos.request();
-    } else {
+    
        aadharBack = await pickImage(context);
-    }
+    
    
     setState(() {});
   }
   void selectPanImage() async {
-    var status = await Permission.photos.status;
-    if (status.isDenied) {
-      showSnackBar(context, "Photo permission is required to upload images.");
-      await Permission.photos.request();
-    } else {
+    
        pan = await pickImage(context);
-    }
+    
    
     setState(() {});
   }
   void selectIdFrontImage() async {
-    var status = await Permission.photos.status;
-    if (status.isDenied) {
-      showSnackBar(context, "Photo permission is required to upload images.");
-      await Permission.photos.request();
-    } else {
+   
   collegeIdPicFront = await pickImage(context);
-    }
+    
   
     setState(() {});
   }
   void selectIdBackImage() async {
-    var status = await Permission.photos.status;
-    if (status.isDenied) {
-      showSnackBar(context, "Photo permission is required to upload images.");
-      await Permission.photos.request();
-    } else {
+   
       collegeIdPicBack = await pickImage(context);
-    }
+    
     
     setState(() {});
   }
@@ -358,6 +338,8 @@ void selectImage() async {
                       ),),
                       SizedBox(height: 10),
                             EmailTextField(),
+                             SizedBox(height: 10),
+                            checkbox(),
                             
                   
                           ],
@@ -369,7 +351,7 @@ void selectImage() async {
                         width: MediaQuery.of(context).size.width * 0.90,
                         child: CustomButton(
                           text: "Continue",
-                          onPressed: () => storeData(),
+                          onPressed: _isChecked ?  () => storeData(): ()=> showSnackBar(context, "Please Check Privacy policy and Terms")
                         ),
                       )
                     ],
@@ -473,7 +455,54 @@ void storeData() async {
         },
       );
     } else {
-      showSnackBar(context, "Please upload required (*) documents");
+      showSnackBar(context, "Please upload valid data");
     }
+  }
+
+  Widget checkbox(){
+    return  Row(
+                children: [
+                  Checkbox(
+                    value: _isChecked,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _isChecked = value ?? false;
+                      });
+                    },
+                  ),
+
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        const TextSpan(
+                          text: '  I agree to the ',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextSpan(
+                          text: 'Privacy policy',
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            // Handle tap on Privacy policy
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const PrivacyPolicyPage()));
+                          },
+                        ),
+                        const TextSpan(
+                          text: ' and ',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextSpan(
+                          text: 'Terms of use.',
+                          style: TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()..onTap = () {
+                            // Handle tap on Terms of use
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const TermsPage()));
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+              
   }
 }

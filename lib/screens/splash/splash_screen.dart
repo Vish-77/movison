@@ -15,14 +15,39 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _circleAnimation;
+  late Animation<double> _fadeInAnimation;
 
   @override
   void initState() {
     super.initState();
+
+    // Initialize animation controller and animations
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+
+    _circleAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+
+    _fadeInAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Interval(0.6, 1.0, curve: Curves.easeIn),
+    );
+
+    _controller.forward();
+
+    // Navigation and network check
     _navigateToHome();
     checkNetworkStatus();
   }
+
   Future<void> checkNetworkStatus() async {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.mobile) {
@@ -31,24 +56,20 @@ class _SplashScreenState extends State<SplashScreen> {
       showSnackBar(context, "No internet connection");
     }
   }
+
   Future<void> _navigateToHome() async {
-    await Future.delayed(Duration(milliseconds: 2000));
+    await Future.delayed(Duration(milliseconds: 3000));
     SharedPreferences s = await SharedPreferences.getInstance();
     String data = s.getString("user_model") ?? '';
     print("-------------------------------------");
     print(data);
 
-    // Check if the user is already signed in
     if (data != '') {
-      // User is signed in, navigate to HomeScreen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                HomeScreen()), // Replace HomeScreen with the actual home screen
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } else {
-      // User is not signed in, navigate to RegisterScreen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => RegisterScreen()),
@@ -60,31 +81,80 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
-    return Material(
-      color: Colors.white, // Set the background color here
-      child: GestureDetector(
+    return Scaffold(
+      body: GestureDetector(
         onTap: () {
-          // Handle tap by navigating to the appropriate screen
           _navigateToHome();
         },
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                child: Text(
-                  'MoViSon',
-                  style: TextStyle(
-                    fontSize: getProportionateScreenWidth(36),
-                    color: Color.fromARGB(255, 47, 86, 231),
-                    fontWeight: FontWeight.bold,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Black Circle with Logo Inside
+            Center(
+              child: FadeTransition(
+                opacity: _circleAnimation,
+                child: ScaleTransition(
+                  scale: _circleAnimation,
+                  child: Container(
+                    width: getProportionateScreenWidth(100),
+                    height: getProportionateScreenWidth(100),
+                    decoration: BoxDecoration(
+                      color: Colors.black, // Black circle
+                      shape: BoxShape.circle,
+                    ),
+                    child:FadeTransition(
+                opacity: _circleAnimation,
+                child: ScaleTransition(
+                  scale: _circleAnimation,
+                  child: Center(
+                    child: ClipRRect(
+                   borderRadius: BorderRadius.all(Radius.circular(40)),
+                      child: Image.asset(
+                        'assets/images/1024.png', // Ensure this image exists in your assets folder
+                        width: getProportionateScreenWidth(80),
+                        height: getProportionateScreenHeight(80),
+                      ),
+                    ),
+                  ),
+                ),
+              ), 
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+           // App Name Text
+            Center(
+              child: FadeTransition(
+                opacity: _fadeInAnimation,
+                child: Padding(
+                  padding: EdgeInsets.only(top: getProportionateScreenHeight(30)),
+                  child: Text(
+                    'MoViSon',
+                    style: TextStyle(
+                      fontSize: getProportionateScreenWidth(30),
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2.0, 2.0),
+                          blurRadius: 3.0,
+                          color: Colors.black26,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

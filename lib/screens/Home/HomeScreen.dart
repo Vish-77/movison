@@ -198,7 +198,7 @@ class Body extends StatelessWidget {
               padding: const EdgeInsets.only(left: 30.0, right: 30),
               child: SizedBox(
                 height: 160,
-                // width: 500,
+                 width: 400,
                 child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
@@ -208,13 +208,14 @@ class Body extends StatelessWidget {
                         borderRadius: const BorderRadius.all(Radius.circular(5)),
                         child: Image.asset(
                           banner[index],
-                          //width: 300,
+                          fit: BoxFit.fill,
+                          width: 300,
                         ),
                       );
                     },
                     separatorBuilder: (context, index) {
                       return const SizedBox(
-                        width: 40,
+                        width: 20,
                       );
                     }),
               ),

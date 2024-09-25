@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:movison/screens/Home/HomeScreen.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart';
 import 'package:movison/screens/MobileAuth/custom_button_in_mobile_auth.dart';
+import 'package:movison/screens/MobileAuth/mobile_register.dart';
 import 'package:movison/screens/MobileAuth/snackbar.dart';
 import 'package:movison/screens/MobileAuth/userinformationscreen.dart';
 
@@ -166,28 +167,15 @@ class _OtpScreenState extends State<OtpScreen> {
                       ),
                       const SizedBox(height: 15),
                       InkWell(
-                        onTap: _showResendText
-                            ? (isResendingOtp
-                                ? null
-                                : () {
-                                    Provider.of<AuthProvider>(context, listen: false).resendOtp(
-                                      phoneNumber: widget.PhoneNumber,
-                                      context: context,
-                                      onSuccess: () {
-                                        // Handle success if needed
-                                      },
-                                      onFailed: (error) {
-                                        // Handle failure if needed
-                                      },
-                                    );
-                                  })
-                            : null,
-                        child: Text(
-                          _showResendText ? "Resend OTP" : "Resend OTP in $_resendCountdown s",
+                        onTap: (){
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>const RegisterScreen() ));
+                        },
+                        child:const Text(
+                          "Try again",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: _showResendText ? (isResendingOtp ? Colors.grey : Colors.black) : Colors.grey,
+                            color:Colors.blue
                           ),
                         ),
                       ),

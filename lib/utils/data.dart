@@ -8,7 +8,7 @@ List categories = [
   {"name": "Rent Books", "icon": "assets/icons/categories/rent.png"},
   {"name": "Buy Books", "icon": "assets/icons/categories/buybook.png"},
 ];
-List banner = ["assets/icons/banner1.jpg", "assets/icons/banner2.jpg"];
+List banner = ["assets/icons/banner1.png", "assets/icons/banner2.png"];
 List courses = [
   {
     "id": 100,
