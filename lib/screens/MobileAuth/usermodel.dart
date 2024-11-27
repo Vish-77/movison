@@ -16,6 +16,7 @@ class UserModel {
   String? panPic;
   String collegeIdPicFront;
   String collegeIdPicBack;
+  String address;
 
   UserModel({
     required this.name,
@@ -33,6 +34,7 @@ class UserModel {
     this.panPic,
     required this.collegeIdPicFront,
     required this.collegeIdPicBack,
+    required this.address
   });
 
   // from map
@@ -53,6 +55,7 @@ class UserModel {
       panPic: map['panPic'] ?? '',
       collegeIdPicFront: map['collegeIdPicFront'] ?? '',
       collegeIdPicBack: map['collegeIdPicBack'] ?? '',
+      address: map['address']?? ''
     );
   }
   final FirebaseAuth _auth = FirebaseAuth.instance;

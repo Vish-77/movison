@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:movison/screens/Account/order.dart';
 import 'package:movison/screens/CollegeInfo/clginfo.dart';
 import 'package:movison/screens/History/history.dart';
 import 'package:movison/screens/MobileAuth/authprovider.dart'
@@ -172,7 +173,28 @@ class _AccountPageState extends State<AccountPage> {
                 );
               },
             ),
-            _buildDivider(),
+                   
+             
+             (u!.phoneNumber == "+918767886904" || u!.phoneNumber == "+917057702200" || u!.phoneNumber == "+911234567890")?Column(
+               children: [
+                _buildDivider(),
+                 SettingItem(
+                  title: "Orders",
+                  leadingIcon: "assets/icons/wallet.svg",
+                  bgIconColor: AppColor.green,
+                  onTap: () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                         builder: (context) => FirestoreToGoogleSheet(),
+                      ),
+                    );
+                  },
+                             ),
+                             _buildDivider()
+               ],
+             ):_buildDivider(),
+     
             SettingItem(
               title: "Payment",
               leadingIcon: "assets/icons/wallet.svg",

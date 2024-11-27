@@ -465,21 +465,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     textAlign: TextAlign.center,
                   )),
             ),
-            const Divider(
-              color: Colors.black26,
-              thickness: 2,
-              height: 20,
-              indent: 80,
-              endIndent: 80,
-            ),
-            Text(
-              'Book Type : ${widget.product.type}',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.ubuntu(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-              ),
-            ),
+            // const Divider(
+            //   color: Colors.black26,
+            //   thickness: 2,
+            //   height: 20,
+            //   indent: 80,
+            //   endIndent: 80,
+            // ),
+            // Text(
+            //   'Book Type : ${widget.product.type}',
+            //   textAlign: TextAlign.center,
+            //   style: GoogleFonts.ubuntu(
+            //     fontWeight: FontWeight.w600,
+            //     fontSize: 16,
+            //   ),
+            // ),
                  const Divider(
               color: Colors.black26,
               thickness: 2,

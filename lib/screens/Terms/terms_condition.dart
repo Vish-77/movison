@@ -73,7 +73,7 @@ class TermsPage extends StatelessWidget {
 - Jurisdiction: These Terms and Conditions shall be governed by and construed in accordance with the laws of Indian government, without regard to its conflict of law provisions.
 
 8. Contact Us
--By email: krishakfarma@gmail.com
+-By email: movison0320@gmail.com
 ''',
                     textAlign: TextAlign.justify,
                     style: GoogleFonts.inter(

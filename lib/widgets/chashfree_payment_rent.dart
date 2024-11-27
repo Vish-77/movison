@@ -12,7 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:movison/screens/Payment/paymenthist.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:flutter_cashfree_pg_sdk/api/cfpaymentgateway/cfpaymentgatewayservice.dart';
 import 'package:flutter_cashfree_pg_sdk/api/cfsession/cfsession.dart';
 import 'package:flutter_cashfree_pg_sdk/utils/cfenums.dart';
@@ -33,6 +33,7 @@ class CashfreePaymentState extends State<CashfreePaymentRent> {
   late CFPaymentGatewayService _cfPaymentGatewayService;
   User? user = FirebaseAuth.instance.currentUser;
   String currentUid = '';
+  final addressController = TextEditingController();
 
   @override
   void initState() {
@@ -122,15 +123,16 @@ if (response.statusCode == 200) {
 
     CollectionReference paymentHistoryCollection =
         FirebaseFirestore.instance.collection('paymentHistory');
-
-    Map<String, dynamic> paymentData = {
+ Map<String, dynamic> paymentData = {
       'userId': currentUid,
       'status': status,
       'paymentId': paymentId,
-      'amount': widget.amount,
+      'amount': widget.amount+40+(widget.bookName.length*100),
       'bookName': widget.bookName,
       'date': date,
       'time': time,
+      'type':"rent",
+      'address':addressController.text.trim()
     };
 
     try {
@@ -160,12 +162,25 @@ if (response.statusCode == 200) {
   
   }
 
-  Future<List<Map<String, dynamic>>> getPaymentHistory() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String paymentHistory = prefs.getString('paymentHistory') ?? '[]';
-    List<dynamic> paymentHistoryList = jsonDecode(paymentHistory);
-    return paymentHistoryList.map((item) => item as Map<String, dynamic>).toList();
+ Future<List<Map<String, dynamic>>> getPaymentHistory() async {
+  try {
+    // Access the 'paymentHistory' collection in Firestore
+    CollectionReference payments = FirebaseFirestore.instance.collection('paymentHistory');
+    
+    // Fetch all documents from the collection
+    QuerySnapshot snapshot = await payments.get();
+    
+    // Convert the snapshot data to a List<Map<String, dynamic>>
+    List<Map<String, dynamic>> paymentHistoryList = snapshot.docs.map((doc) {
+      return doc.data() as Map<String, dynamic>; // Convert each document's data to Map
+    }).toList();
+
+    return paymentHistoryList;
+  } catch (e) {
+    print('Error fetching payment history: $e');
+    return [];
   }
+}
 
  
   @override
@@ -240,7 +255,7 @@ if (response.statusCode == 200) {
                           // height:60,
                           width: 150,
                           child: Text(
-                            "${widget.bookName}",
+                            widget.bookName.join(','),
                             textAlign: TextAlign.justify,
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
@@ -328,11 +343,44 @@ if (response.statusCode == 200) {
                         )
                       ],
                     ),
+                    const SizedBox(height: 10),
+                     const Padding(
+                      padding: EdgeInsets.only(left: 30.0),
+                      child:  Text(
+                            'Enter Address :',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                    ),
+                        const SizedBox(height: 10),
+                    addressTextField(),
+                     const SizedBox(height: 10),
                   ],
                 ),
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+   Padding addressTextField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        controller: addressController,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          labelText: 'Enter Address',
+          labelStyle: TextStyle(fontSize: 17, color: Colors.grey.shade500),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 2, color: Colors.black),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 2, color: Colors.black),
+          ),
+          
         ),
       ),
     );

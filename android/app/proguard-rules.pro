@@ -16,3 +16,5 @@
     protected Object[][] getContents();
 }
 -keep public class com.google.vending.licensing.ILicensingService
+-keep class com.cashfree.pg.** { *; }
+-dontwarn com.cashfree.pg.**

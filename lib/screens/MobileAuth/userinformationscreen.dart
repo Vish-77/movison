@@ -30,6 +30,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
   File? collegeIdPicBack;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
+  final addressController = TextEditingController();
   bool _isChecked=false;
 
   @override
@@ -322,7 +323,7 @@ void selectImage() async {
                       Container(
                         width: MediaQuery.of(context).size.width,
                         
-                        margin: const EdgeInsets.only(top: 20),
+                        margin: const EdgeInsets.only(top: 20,),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -338,6 +339,12 @@ void selectImage() async {
                       ),),
                       SizedBox(height: 10),
                             EmailTextField(),
+                             SizedBox(height: 10),
+                             Text("Enter Student Address *",style: GoogleFonts.inter( 
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                      ),),
+                              addressTextField(),
                              SizedBox(height: 10),
                             checkbox(),
                             
@@ -408,6 +415,28 @@ Padding EmailTextField() {
       ),
     );
   }
+  Padding addressTextField() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        controller: addressController,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          labelText: 'Enter Address',
+          labelStyle: TextStyle(fontSize: 17, color: Colors.grey.shade500),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 2, color: Color(0xffC5C5C5)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(width: 2, color: Colors.black),
+          ),
+          //suffixIcon: CustomSurffixIcon(svgIcon: "assets/icons/email_box1.svg"),
+        ),
+      ),
+    );
+  }
   
 
   // store user data to database
@@ -428,10 +457,11 @@ void storeData() async {
       aadharBack: '',
       panPic: '',
       collegeIdPicFront: '',
-      collegeIdPicBack: ''
+      collegeIdPicBack: '',
+      address: addressController.text.trim()
 
     );
-    if (image != null && aadharFront !=null && aadharBack!= null && collegeIdPicFront != null && collegeIdPicBack != null && nameController.text.isNotEmpty && emailController.text.isNotEmpty) {
+    if (image != null && aadharFront !=null && aadharBack!= null && collegeIdPicFront != null && collegeIdPicBack != null && nameController.text.isNotEmpty && emailController.text.isNotEmpty && addressController.text.isNotEmpty) {
       ap.saveUserDataToFirebase(
         context: context,
         userModel: userModel,
@@ -441,6 +471,7 @@ void storeData() async {
         panPic:pan,
         collegeIdPicFront:collegeIdPicFront!,
         collegeIdPicBack: collegeIdPicBack!,
+        
         onSuccess: () {
           ap.saveUserDataToSP().then(
                 (value) => ap.setSignIn().then(
@@ -461,6 +492,7 @@ void storeData() async {
 
   Widget checkbox(){
     return  Row(
+      mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Checkbox(
                     value: _isChecked,
@@ -475,7 +507,7 @@ void storeData() async {
                     text: TextSpan(
                       children: [
                         const TextSpan(
-                          text: '  I agree to the ',
+                          text: 'I agree to the ',
                           style: TextStyle(color: Colors.black),
                         ),
                         TextSpan(
@@ -487,7 +519,7 @@ void storeData() async {
                           },
                         ),
                         const TextSpan(
-                          text: ' and ',
+                          text: 'and',
                           style: TextStyle(color: Colors.black),
                         ),
                         TextSpan(

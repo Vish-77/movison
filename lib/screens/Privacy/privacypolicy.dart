@@ -20,7 +20,7 @@ class PrivacyPolicyPage extends StatelessWidget {
                   height: 20,
                 ),
                 Text(
-                  "Welcome to Movison. This Privacy Policy is designed to help you understand how we collect, use, and safeguard your personal information when you use our mobile application and services.",
+                  "Welcome to MoViSon. This Privacy Policy is designed to help you understand how we collect, use, and safeguard your personal information when you use our mobile application and services.",
                   textAlign: TextAlign.justify,
                   style: GoogleFonts.inter(
                 fontWeight: FontWeight.w500,

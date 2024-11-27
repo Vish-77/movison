@@ -226,7 +226,8 @@ class AuthProvider extends ChangeNotifier {
         univercity: snapshot['univercity'] ,
         college: snapshot['college'],
       branch: snapshot['branch'],
-      sem: snapshot['sem']
+      sem: snapshot['sem'],
+      address: snapshot['address']
       );
       _uid = userModel.uid;
     });
